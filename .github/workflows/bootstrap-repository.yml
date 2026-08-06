@@ -20,8 +20,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          cat .publish/final-*.b64 | base64 --decode > /tmp/repository.tar.gz
-          echo '0ec46b2c1b0db64a60e6f5778f2972478cadf361ff8ea20d45d2514e4f7833ad  /tmp/repository.tar.gz' | sha256sum -c -
+          cat .publish/bundle-*.b64 | base64 --decode > /tmp/repository.tar.gz
+          echo '9c130c9b00d3843b236909fcea2959b1b882d723ee8393db5199f872c3c1df42  /tmp/repository.tar.gz' | sha256sum -c -
       - name: Publish structured repository
         shell: bash
         run: |
