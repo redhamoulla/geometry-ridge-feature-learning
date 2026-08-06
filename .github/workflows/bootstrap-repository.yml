@@ -21,7 +21,7 @@ jobs:
         run: |
           set -euo pipefail
           cat .publish/bundle-*.b64 | base64 --decode > /tmp/finalrepo.tar.gz
-          echo '39236c06bbbc62c62ef8c294d48ab3e059119f8d5bcd0c050b2530e89cb2ded6  /tmp/finalrepo.tar.gz' | sha256sum -c -
+          echo '29b3b9fdad381d1ec34e7525a27cb1ca40a833e4640be671cced0980883dbda8  /tmp/finalrepo.tar.gz' | sha256sum -c -
       - name: Publish structured repository
         shell: bash
         run: |
