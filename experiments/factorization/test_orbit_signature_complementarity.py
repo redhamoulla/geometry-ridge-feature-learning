@@ -8,6 +8,7 @@ Random orthogonal rotations remove coordinate artefacts.
 """
 from __future__ import annotations
 import json
+import os
 from pathlib import Path
 import numpy as np
 import pandas as pd
@@ -17,7 +18,8 @@ from sklearn.model_selection import GroupKFold, cross_val_predict
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-OUT = Path(__file__).resolve().parent
+OUT = Path(os.environ.get("EXPERIMENT_OUTPUT_DIR", str(Path(__file__).resolve().parent)))
+OUT.mkdir(parents=True, exist_ok=True)
 SPECTRA = {0: np.array([0.78, 0.43, 0.12]), 1: np.array([0.66, 0.54, 0.08])}
 ENERGIES = {0: np.array([1.70, 0.25, 0.05]), 1: np.array([0.05, 0.25, 1.70])}
 

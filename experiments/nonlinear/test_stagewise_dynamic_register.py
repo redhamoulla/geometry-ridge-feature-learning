@@ -7,7 +7,7 @@ features can. This tests the claim that the dynamic register contains temporal r
 information erased by final scalar/static attribution.
 """
 from __future__ import annotations
-import json, math
+import json, math, os
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Tuple
@@ -21,7 +21,8 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 
-OUT=Path(__file__).resolve().parent
+OUT=Path(os.environ.get("EXPERIMENT_OUTPUT_DIR", str(Path(__file__).resolve().parent)))
+OUT.mkdir(parents=True, exist_ok=True)
 
 @dataclass
 class Cfg:

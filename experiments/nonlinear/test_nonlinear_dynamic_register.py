@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import json
 import math
+import os
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Dict, Iterable, List, Tuple
@@ -364,7 +365,8 @@ def aggregate_and_plot(all_df: pd.DataFrame, meta_df: pd.DataFrame, out_dir: Pat
 
 def main() -> None:
     cfg = Config()
-    out_dir = Path(__file__).resolve().parent
+    out_dir = Path(os.environ.get("EXPERIMENT_OUTPUT_DIR", str(Path(__file__).resolve().parent)))
+    out_dir.mkdir(parents=True, exist_ok=True)
     frames: List[pd.DataFrame] = []
     metas: List[dict] = []
     for r in range(cfg.replicates):

@@ -12,6 +12,7 @@ chance.
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 
 import numpy as np
@@ -25,7 +26,8 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
-OUT = Path(__file__).resolve().parent
+OUT = Path(os.environ.get("EXPERIMENT_OUTPUT_DIR", str(Path(__file__).resolve().parent)))
+OUT.mkdir(parents=True, exist_ok=True)
 
 # Two contraction spectra with exactly identical trace and determinant of I-C.
 C_A = np.array([0.8, 0.6, 0.2], dtype=float)

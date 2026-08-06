@@ -2,6 +2,7 @@
 """Frozen-feature and linearized controls for the functional tangent drift."""
 from __future__ import annotations
 import json
+import os
 from dataclasses import dataclass
 from pathlib import Path
 import numpy as np, pandas as pd, torch
@@ -15,7 +16,8 @@ from sklearn.preprocessing import StandardScaler
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-OUT=Path(__file__).resolve().parent
+OUT=Path(os.environ.get("EXPERIMENT_OUTPUT_DIR", str(Path(__file__).resolve().parent)))
+OUT.mkdir(parents=True, exist_ok=True)
 @dataclass
 class Config:
     n_train:int=500; n_test:int=1000; n_probe:int=140; d:int=10; h:int=8; epochs:int=300; lr:float=.02; weight_decay:float=1e-4; replicates:int=10
