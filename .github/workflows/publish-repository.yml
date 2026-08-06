@@ -21,7 +21,7 @@ jobs:
         run: |
           set -euo pipefail
           cat .publish/bundle-*.b64 | base64 --decode > /tmp/compactrepo.tar.gz
-          echo '0032f6bd09e4ebb49c28fe47a0311a080b431195c0a61803bb97773d4a25a663  /tmp/compactrepo.tar.gz' | sha256sum -c -
+          echo '5b732b947729b7c9d300ce99c4c25b3460e9136d4dcbbdfeeae6bc73c390d4f2  /tmp/compactrepo.tar.gz' | sha256sum -c -
       - name: Publish structured repository
         shell: bash
         run: |
