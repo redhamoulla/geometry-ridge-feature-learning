@@ -1,34 +1,36 @@
-name: bootstrap-repository
+name: publish-repository
 
 on:
   push:
     branches: [main]
-    paths: ['.artifacts/**']
+    paths:
+      - '.publish/READY'
 
 permissions:
   contents: write
 
 jobs:
-  bootstrap:
-    if: ${{ hashFiles('.artifacts/*.b64') != '' }}
+  publish:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Reconstruct repository files and paper artifacts
+      - name: Reconstruct and validate repository bundle
+        shell: bash
         run: |
-          cat .artifacts/repository-files-*.b64 | base64 --decode > /tmp/repository-files.tar.gz
-          grep '/tmp/repository-files.tar.gz' .artifacts/SHA256SUMS | sha256sum -c -
-          tar -xzf /tmp/repository-files.tar.gz
-          cat .artifacts/paper-pdf-*.b64 | base64 --decode > paper/conditional_geometric_register_of_observations_v7_en.pdf
-          cat .artifacts/paper-sources-*.b64 | base64 --decode > paper/conditional_geometric_register_of_observations_v7_en_sources.zip
-          grep -v '/tmp/repository-files.tar.gz' .artifacts/SHA256SUMS | sha256sum -c -
-          rm -rf .artifacts .github/workflows/bootstrap-repository.yml
-      - name: Commit structured repository
+          set -euo pipefail
+          cat .publish/bundle-*.b64 | base64 --decode > /tmp/finalrepo.tar.gz
+          echo '75fead9fb8c9ef804825c818eacadd068c36637f19fa86a7bea17a67125f4c8d  /tmp/finalrepo.tar.gz' | sha256sum -c -
+      - name: Publish structured repository
+        shell: bash
         run: |
+          set -euo pipefail
+          find . -mindepth 1 -maxdepth 1 ! -name '.git' ! -name '.publish' -exec rm -rf {} +
+          tar -xzf /tmp/finalrepo.tar.gz -C .
+          rm -rf .publish
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add -A
           git commit -m 'build: publish paper and reproducible simulations'
-          git push
+          git push origin HEAD:main
