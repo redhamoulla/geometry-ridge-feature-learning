@@ -2,9 +2,10 @@
 
 ## Public data
 
-The repository includes `Concrete_Data_Yeh.csv`, used by the public robustness experiment.
+`data/public/` contains the public tables used by the repository:
 
-California Housing is public but is not duplicated in Git. The launcher uses scikit-learn to fetch it or accepts an explicit CSV through the experiment script.
+- `california_housing_raw.csv`
+- `Concrete_Data_Yeh.csv`
 
 ## Private SeLoger table
 

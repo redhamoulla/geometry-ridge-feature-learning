@@ -1,0 +1,65 @@
+{
+  "linear_factorization": {
+    "reps": 40,
+    "n_players": 8,
+    "max_abs_error_information_factorization": 4.440892098500626e-16,
+    "max_abs_error_predictive_factorization": 1.887379141862766e-15,
+    "spearman_information": 1.0,
+    "spearman_predictive": 1.0
+  },
+  "nonlinear_matched_collision": {
+    "config": {
+      "n_anchor": 500,
+      "n_pool": 450,
+      "n_test": 700,
+      "d": 10,
+      "h": 10,
+      "noise": 1.0,
+      "epochs": 220,
+      "checkpoints": [
+        0,
+        15,
+        45,
+        100,
+        220
+      ],
+      "lr": 0.018,
+      "weight_decay": 0.0001,
+      "ridge_metric": 0.02,
+      "vertical_amp": 0.9,
+      "n_pairs": 18,
+      "reps": 6
+    },
+    "n_matched_pairs": 108,
+    "median_relative_match_error": 0.018182831884194166,
+    "q90_relative_match_error": 0.052348142517048814,
+    "median_final_contraction_label": 0.207746915595045,
+    "median_final_contraction_covariate": 0.4573630555117528,
+    "median_final_effort_label": 2.3466033555880363,
+    "median_final_effort_covariate": 3.275785157898075,
+    "classification": {
+      "final_predictive_attribution_scalar": {
+        "auc": 0.49879972565157754,
+        "n_features": 1
+      },
+      "final_function_impact_scalar": {
+        "auc": 0.44238683127572015,
+        "n_features": 1
+      },
+      "final_register_2d": {
+        "auc": 0.8685699588477366,
+        "n_features": 2
+      },
+      "dynamic_register": {
+        "auc": 0.8792009602194788,
+        "n_features": 10
+      },
+      "dynamic_scalar_attribution": {
+        "auc": 0.5643861454046638,
+        "n_features": 5
+      }
+    },
+    "dynamic_collision_median_final_distance": 0.027444190675278028,
+    "dynamic_collision_median_trajectory_distance": 7.979396525590952
+  }
+}

@@ -1,8 +1,7 @@
 {
   "paper": {
-    "markdown": "paper/conditional_geometric_register_of_observations_v7_en.md",
-    "latex": "paper/src/main.tex",
-    "bibliography": "paper/src/references.bib"
+    "pdf": "paper/conditional_geometric_register_of_observations_v7_en.pdf",
+    "sources": "paper/src"
   },
   "suites": {
     "quick": [
@@ -26,10 +25,8 @@
     ]
   },
   "public_data": [
+    "data/public/california_housing_raw.csv",
     "data/public/Concrete_Data_Yeh.csv"
   ],
-  "private_data_redistributed": false,
-  "external_public_data": [
-    "California Housing via scikit-learn"
-  ]
+  "private_data_redistributed": false
 }

@@ -1,9 +1,12 @@
-PDF=conditional_geometric_register_of_observations_v7_en.pdf
+BIBTEX ?= $(shell if command -v bibtex.original >/dev/null 2>&1; then echo bibtex.original; else echo bibtex; fi)
 
-all: $(PDF)
+.PHONY: pdf clean
 
-$(PDF): main.tex references.bib
-	latexmk -pdf -interaction=nonstopmode main.tex
+pdf:
+	pdflatex -interaction=nonstopmode main.tex
+	$(BIBTEX) main
+	pdflatex -interaction=nonstopmode main.tex
+	pdflatex -interaction=nonstopmode main.tex
 
 clean:
-	latexmk -C
+	rm -f main.aux main.bbl main.blg main.log main.out main.toc main.lof main.lot main.pdf
