@@ -1,12 +1,9 @@
 # Paper
 
-This directory contains the English Version 7 manuscript and its complete LaTeX source tree.
+This directory contains the English Version 7 manuscript in source form.
 
-Build the paper with:
+- `conditional_geometric_register_of_observations_v7_en.md`: readable Markdown export.
+- `src/main.tex`: complete English LaTeX manuscript.
+- `src/references.bib`: bibliography.
 
-```bash
-cd paper/src
-make
-```
-
-A recent TeX Live distribution with `latexmk` is recommended.
+The figure-generating scripts are included under `experiments/`. Re-running the public experiments regenerates the corresponding assets. The private SeLoger figures require the private source CSV and are therefore not bundled.

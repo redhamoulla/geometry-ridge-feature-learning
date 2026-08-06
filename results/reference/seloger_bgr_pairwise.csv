@@ -1,7 +1,0 @@
-scenario,level,epsilon,n,mean_bgr_minus_ridge,ci95_half_width,bgr_wins,min_bgr_minus_ridge,max_bgr_minus_ridge,note
-gaussian_noise,0.4,1.0,10,0.00433492747593493,0.0018320218814890032,0,0.00046779252885364997,0.008705370408468416,descriptive repeated-split summary; overlapping splits are not treated as independent replicates
-leverage_amplitude,50.0,0.05,10,-0.14407401039442067,0.007652642941327208,10,-0.1698856511180457,-0.12673283612398883,descriptive repeated-split summary; overlapping splits are not treated as independent replicates
-mixed_amplitude,50.0,0.05,10,-0.18013664365381374,0.01702033522478085,10,-0.21472273458318902,-0.13227460294063387,descriptive repeated-split summary; overlapping splits are not treated as independent replicates
-nominal_raw,0.0,0.0,10,0.0012195737376317656,0.0015282320800344732,5,-0.0017104582413536296,0.006424536351673171,descriptive repeated-split summary; overlapping splits are not treated as independent replicates
-realistic_cells,1.0,0.05,10,-9.610298107949611e-05,0.0020200486966123954,5,-0.005712513205954617,0.006361332497324734,descriptive repeated-split summary; overlapping splits are not treated as independent replicates
-vertical_amplitude,4.0,0.05,10,-0.05508696244304552,0.005884091407469814,10,-0.06582735697970885,-0.03844345561083601,descriptive repeated-split summary; overlapping splits are not treated as independent replicates

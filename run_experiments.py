@@ -76,7 +76,7 @@ def main() -> None:
     for script in scripts:
         extra = None
         if script.name == "test_local_conditional_surprise_california.py":
-            extra = ["--data", str(ROOT / "data" / "public" / "california_housing_raw.csv"), "--output-dir", str(RESULTS / script.stem)]
+            extra = ["--output-dir", str(RESULTS / script.stem)]
         run_script(script, env, extra)
 
 

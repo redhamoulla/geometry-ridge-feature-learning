@@ -1,4 +1,4 @@
-.PHONY: install test quick public paper
+.PHONY: install test quick public
 
 install:
 	python -m pip install -r requirements.txt
@@ -11,6 +11,3 @@ quick:
 
 public:
 	python run_experiments.py --suite public
-
-paper:
-	$(MAKE) -C paper/src
