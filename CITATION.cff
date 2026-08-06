@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "If you use this work, please cite the paper."
+title: "Conditional Geometric Register of Observations"
+type: software
+authors:
+  - family-names: Moulla
+    given-names: Redha
+repository-code: "https://github.com/redhamoulla/geometry-ridge-feature-learning"
+version: "7"
+date-released: 2026-08-04
+preferred-citation:
+  type: article
+  title: "Conditional Geometric Register of Observations: From Ridge to Feature Learning — Invariants, Diagnostics, and Dynamics"
+  authors:
+    - family-names: Moulla
+      given-names: Redha
+  year: 2026
