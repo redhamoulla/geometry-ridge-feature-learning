@@ -1,0 +1,50 @@
+\section{Supplementary Proofs}
+\label{app:proofs}
+\subsection{Weighted pseudoinverse and the Tikhonov limit}
+\label{app:pseudoinverse}
+Let $R\succ0$, $M\succ0$, and
+\[
+B=R^{-1/2}AM^{-1/2},
+\qquad
+z=R^{-1/2}(y-A\theta_0).
+\]
+Setting $u=M^{1/2}(\theta-\theta_0)$, the least-squares problem becomes $\min_u\norm{Bu-z}^2$. Its minimizers are $B^\dagger z+\Ker B$, and the one of minimum norm is $B^\dagger z$. Hence
+\[
+\theta_M^\dagger=\theta_0+M^{-1/2}B^\dagger z,
+\]
+with $\theta_M^\dagger-\theta_0\perp_M\Ker A$. If $B=U\Sigma V^\top$, the Tikhonov minimizer is
+\[
+\theta_\lambda-\theta_0
+=M^{-1/2}\sum_j\frac{\sigma_j}{\sigma_j^2+\lambda}\inner{z}{u_j}v_j.
+\]
+Every coefficient converges to $1/\sigma_j$ when $\sigma_j>0$ and to $0$ when $\sigma_j=0$, giving the weighted Moore--Penrose limit.
+
+\subsection{Details of the rank-one identities}
+\label{app:rankone}
+The Sherman--Morrison lemma gives
+\[
+P_{S+i}=P_S-
+\frac{P_Sh_ih_i^\top P_S}{r_i+h_i^\top P_Sh_i}.
+\]
+With $q=s/r$, the unique nonzero eigenvalue of $B$ is $q$, so that of $C=B(I+B)^{-1}$ is $\rho=q/(1+q)$. The displacement is
+\[
+d=\frac{P_Sh_i}{r+s}\nu.
+\]
+Therefore,
+\[
+\norm d_{G_S}^2
+=\frac{\nu^2s}{(r+s)^2}
+=\frac{s}{r+s}\frac{\nu^2}{r+s}
+=\rho z^2.
+\]
+Moreover,
+\[
+\norm d_{G_S+\Gamma_i}^2
+=\norm d_{G_S}^2+\frac{(h_i^\top d)^2}{r_i}
+=\frac{\rho}{1-\rho}z^2.
+\]
+Finally, the post-insertion residual is
+\[
+\nu-h_i^\top d=(1-\rho)\nu.
+\]
+

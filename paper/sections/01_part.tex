@@ -1,0 +1,39 @@
+
+\hypersetup{pageanchor=false}
+
+% -----------------------------------------------------------------------------
+% Cover
+% -----------------------------------------------------------------------------
+\thispagestyle{empty}
+\vspace*{1.25cm}
+{\sffamily\color{teal}\fontsize{11.5}{14}\selectfont WORKING PAPER -- VERSION 7 -- AUGUST 2026\par}
+\vspace{0.95cm}
+{\sffamily\bfseries\color{black!88}\fontsize{24.5}{29}\selectfont Conditional Geometric Register\\of Observations\par}
+\vspace{0.28cm}
+{\sffamily\color{slate}\fontsize{16.2}{19}\selectfont From Ridge to Feature Learning: Invariants, Diagnostics, and Dynamics\par}
+\vspace{0.22cm}
+{\sffamily\bfseries\color{teal}\fontsize{11.2}{14}\selectfont Observation Qualification and Structural Robustness\par}
+\vspace{0.68cm}
+{\sffamily\fontsize{12}{14}\selectfont Redha Moulla\par}
+{\sffamily\small\color{slate} AXIA, France\par}
+\vspace{0.60cm}
+
+\begin{abstractbox}
+\small
+\textbf{Abstract.} A training observation acts simultaneously on model observability and on the model state. Relative to a context $S$, we describe it by the decorated Gauss--Newton quadratic datum
+\[
+\Jreg_{i\mid S}=(G_S,\Gamma_i,\alpha_i),
+\]
+where $G_S\succ0$ is the collective geometry, $\Gamma_i\succeq0$ is the observability increment, and $\alpha_i$ is the cotangent effort. After whitening, this datum becomes a pair $(B,b)$ defined modulo an orthogonal action. Its orbit is completely classified by the spectrum of $B$ and by the energy of $b$ in each eigenspace. The principal quotient admits a global chart with $2p$ coordinates, but an isolated observation most often lies on a low-rank stratum: for $\rank B=r<p$, the generic stratum has $2r+1$ invariants, and $2r$ when the effort is compatible with the curvature, $b\in\Img B$. The scalar quadratic case therefore corresponds to $r=1$ and reduces exactly to conditional leverage and the magnitude of the studentized innovation. Leverage, information gain, Cook's distance, target influence, and marginal information contributions appear as non-injective scalarizations of the register; genuinely non-scalar structure becomes possible as soon as the rank exceeds one.
+
+The triplet is complete only for the parametric action of the Gauss--Newton quadratic model, up to an additive constant. We further distinguish invisibility induced by the loss metric from invisibility induced by the parametric pullback, without assuming that their projectors commute. In the nonlinear setting, finite insertion follows a reweighting path along which observability and effort evolve. The experiments verify the exact identities, exhibit a collision of five scalarizations in rank three, and track the functional mobility of a network. Public and private tabular stress tests then illustrate contraction and innovation budgets, together with their nominal costs and transfer limitations. This robust prototype remains secondary and is not claimed as novel: the main contribution is the non-scalar, stratified classification of the conditional action of an observation before any scalar attribution.
+\end{abstractbox}
+
+\clearpage
+\hypersetup{pageanchor=true}
+\pagenumbering{arabic}
+\setcounter{tocdepth}{1}
+\tableofcontents
+\clearpage
+
+% -----------------------------------------------------------------------------

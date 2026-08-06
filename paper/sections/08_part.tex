@@ -1,0 +1,153 @@
+\section{Nonlinear Extension and the Path Register}
+% -----------------------------------------------------------------------------
+\subsection{Exact influence and the Gauss--Newton diagnostic}
+Let
+\[
+L_S(\theta)=L_0(\theta)+\sum_{j\in S}\ell_j(\theta)
+\]
+and let $\widehat\theta_S$ be a strict local minimum. Write
+\[
+H_S=\nabla^2L_S(\widehat\theta_S),
+\qquad
+G_S^{\rm obs}=G_0+\sum_{j\in S}J_j^*W_jJ_j.
+\]
+The exact infinitesimal response to reweighting point $i$ is
+\begin{equation}
+v_{i\mid S}^{H}=-H_S^{-1}\alpha_i,
+\label{eq:exact-influence}
+\end{equation}
+whereas the Gauss--Newton observability diagnostic is
+\begin{equation}
+v_{i\mid S}^{\rm obs}=-(G_S^{\rm obs})^{-1}\alpha_i.
+\label{eq:gn-influence}
+\end{equation}
+They coincide for quadratic models, affine maps under quadratic loss, or when the residual terms in the Hessian are negligible. In general, identifying them would amount to equating Gauss--Newton and the exact Hessian without assumptions \citep{schraudolph2002,martens2020}.
+
+\subsection{Finite insertion through a reweighting path}
+Consider
+\begin{equation}
+L_{S,w}(\theta)=L_S(\theta)+w\ell_i(\theta),
+\qquad 0\leq w\leq1.
+\end{equation}
+Assume there exists a $C^1$ branch of local minima $\gamma_{i\mid S}(w)$ and that the Hessian
+\[
+H_{S,w}=\nabla^2L_{S,w}(\gamma_{i\mid S}(w))
+\]
+is invertible along the branch.
+
+\begin{theorem}[Insertion-path equation]
+Under the assumptions above,
+\begin{equation}
+\boxed{
+\dot\gamma_{i\mid S}(w)
+=-H_{S,w}^{-1}\alpha_i(\gamma_{i\mid S}(w)).
+}
+\label{eq:insertion-path}
+\end{equation}
+For any smooth target $\tau$,
+\begin{equation}
+\boxed{
+\tau(\gamma(1))-\tau(\gamma(0))
+=-\int_0^1\dd\tau_{\gamma(w)}
+\left[H_{S,w}^{-1}\alpha_i(\gamma(w))\right]\dd w.
+}
+\label{eq:finite-target-effect}
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+The optimality condition is $\dd L_{S,w}(\gamma(w))=0$. Differentiating with respect to $w$ gives
+\[
+H_{S,w}\dot\gamma(w)+\alpha_i(\gamma(w))=0.
+\]
+Invertibility of $H_{S,w}$ gives \eqref{eq:insertion-path}, and the integrated chain rule gives \eqref{eq:finite-target-effect}.
+\end{proof}
+
+This result is an application of the implicit-function theorem; its role is organizational. It shows that the influence function is the initial velocity of a finite path and that a dynamic value must follow this path. Recent approaches to dynamic valuation and optimal-control sensitivity are therefore direct prior work to discuss, in particular NDDV \citep{liang2024nddv}.
+
+\subsection{Direct contribution and feature-learning feedback}
+Fix a connection on parameter space and define along the path
+\begin{equation}
+G_{S,w}^{\rm obs}(\theta)
+=G_0(\theta)+\sum_{j\in S}\Gamma_j(\theta)+w\Gamma_i(\theta).
+\end{equation}
+Its covariant derivative is
+\begin{equation}
+\frac{D}{\dd w}G_{S,w}^{\rm obs}(\gamma(w))
+=
+\underbrace{\Gamma_i(\gamma(w))}_{\text{direct contribution}}
++
+\underbrace{\nabla_{\dot\gamma}G_0
++\sum_{j\in S}\nabla_{\dot\gamma}\Gamma_j
++w\nabla_{\dot\gamma}\Gamma_i}_{\text{geometric feedback}}.
+\label{eq:geometric-feedback}
+\end{equation}
+In a linear model with a fixed background metric, the covariant derivatives in the second term vanish. In a network that learns its representations, the displacement induced by the label changes the sensitivities of both present and future points. A frozen regime therefore requires more than a constant $J_i$ for the added point alone: one needs $\nabla G_0=0$, $\nabla J_j=0$, and $\nabla W_j=0$ for every relevant point.
+
+\subsection{Comparing registers over time}
+The raw Jacobian $J_t$ is not invariant under reparameterization. To compare functional geometry during learning, fix a declared background metric $g_0$ and a probe set $Z$. We track
+\begin{equation}
+K_t^{(0)}=J_Z(\theta_t)g_0^\sharp J_Z(\theta_t)^*,
+\label{eq:functional-kernel}
+\end{equation}
+an operator in output space. If $g_0$ transforms tensorially, $K_t^{(0)}$ is invariant under reparameterization. The NTK is the case $g_0=I$ in a fixed parameterization \citep{jacot2018}; the GTK extends this view to other geometries \citep{bai2025gtk}.
+
+The prediction space on the probes is equipped once and for all with its Euclidean inner product. The identification between output vectors and covectors, adjoints, norms, and Hilbert--Schmidt products below are all computed relative to this fixed metric. For two nonzero Hilbert--Schmidt operators $A$ and $B$, we use
+\begin{equation}
+\operatorname{align}(A,B)
+=\frac{\inner{A}{B}_{\rm HS}}{\norm A_{\rm HS}\norm B_{\rm HS}},
+\qquad
+\operatorname{drift}(A,B)
+=\norm{\frac{A}{\norm A_{\rm HS}}-\frac{B}{\norm B_{\rm HS}}}_{\rm HS}
+=\sqrt{2\bigl(1-\operatorname{align}(A,B)\bigr)}.
+\label{eq:alignment-drift}
+\end{equation}
+These definitions make the protocol's numerical values reproducible and separate scale variation from change in operator direction. The alignment or normalized drift of $K_t^{(0)}$ is therefore a more defensible diagnostic of feature learning than $\norm{J_t-J_0}$ alone. Dynamic alignment of tangent features has already been studied from other viewpoints \citep{baratin2021}.
+
+The Gram matrix of a hidden representation is also tracked as an auxiliary diagnostic, but it is not a general invariant of the functional model: an invertible transformation compensated in the following layer may change the representation without changing the function. We therefore report it as an architecture- and layer-dependent object, never as an intrinsic invariant.
+
+To compare vectors $v_i(t)$ or $d_i(t)$ belonging to distinct tangent spaces, one must additionally specify a transport: the Levi-Civita connection of $g_0$, transport in a fixed chart, or functional comparison after applying $J_Z$. Without such a convention, a ``vector trajectory of the register'' remains frame-dependent.
+
+\subsection{Dynamic register, spectral measures, and crossings}
+At each time $t$, point $i$ has orbit signature
+\begin{equation}
+\Sigreg_i(t)=\Sigreg\left(G_t^{-1/2}\Gamma_i(t)G_t^{-1/2},
+G_t^{-1/2}\alpha_i(t)\right).
+\end{equation}
+Tracking individually ordered eigenvalues can become unstable at spectral crossings. A continuous representation, symmetric under permutation and adapted to multiplicities, is given by the finite measures
+\begin{equation}
+\nu_{B_t}=\sum_{\lambda\in\spec(B_t)}m_\lambda(t)\,\delta_\lambda,
+\qquad
+\mu_{B_t,b_t}=\sum_{\lambda\in\spec(B_t)}\beta_\lambda(t)\,\delta_\lambda.
+\label{eq:spectral-measures}
+\end{equation}
+Their invariant moments are
+\begin{equation}
+M_k(t)=\int \lambda^k\,\dd\nu_{B_t}(\lambda)=\tr(B_t^k),
+\qquad
+N_k(t)=\int \lambda^k\,\dd\mu_{B_t,b_t}(\lambda)=b_t^\top B_t^k b_t.
+\label{eq:spectral-moments}
+\end{equation}
+\begin{proposition}[A sufficient number of moments]
+Let $B\in\operatorname{Sym}(p)$ and suppose its spectrum contains $r$ distinct eigenvalues. The moments
+\[
+M_0=p,\;M_1,\ldots,M_p
+\]
+determine the characteristic polynomial of $B$ through Newton's identities, and hence the spectral measure $\nu_B$ with multiplicities. Once the distinct eigenvalues $\lambda_1,\ldots,\lambda_r$ are known, the moments
+\[
+N_0,\ldots,N_{r-1}
+\]
+determine the energies $\beta_{\lambda_j}$ through the Vandermonde system
+\[
+N_k=\sum_{j=1}^r\beta_{\lambda_j}\lambda_j^k,
+\qquad 0\le k\le r-1.
+\]
+\end{proposition}
+\begin{proof}
+The power sums $M_k=\tr(B^k)$ recursively determine the elementary coefficients of the characteristic polynomial. The second system is linear, with matrix $(\lambda_j^k)_{0\le k<r,1\le j\le r}$, which is invertible when the $\lambda_j$ are distinct.
+\end{proof}
+These formulas are exact but may be numerically ill-conditioned when eigenvalues are close, because the Vandermonde matrix becomes unstable. For dynamic tracking, however, the moments $M_k(t)$ and $N_k(t)$ remain continuous in the coefficients of $(B_t,b_t)$ even when eigenvalue labels swap. The discrete signature is useful for instantaneous interpretation; measures, better-conditioned polynomial bases, or resolvents are preferable for trajectories.
+
+The trajectory may reveal transitions absent from the final state: an informative point becomes redundant, a previously invisible direction becomes observable, or a coherent point becomes conflicting after representation reorganization. This dynamic accounting should not be confused with a claim of priority over all temporal attribution; it provides a particular tensorial decomposition of the mechanisms being tracked.
+
+% -----------------------------------------------------------------------------

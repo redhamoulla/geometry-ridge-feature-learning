@@ -1,0 +1,97 @@
+\section{Preliminaries: Observation, Quotient, and Contraction}
+% -----------------------------------------------------------------------------
+\subsection{Linear semi-geometry}
+Let $\Theta=\R^p$, $Y=\R^n$, $A:\Theta\to Y$, and
+\[
+y=A\theta^\star+\varepsilon,\qquad \E[\varepsilon]=0,\qquad \operatorname{Cov}(\varepsilon)=R\succ0.
+\]
+The weighted quadratic loss is
+\begin{equation}
+L(\theta)=\frac12\norm{A\theta-y}_{R^{-1}}^2,
+\qquad
+G_A=A^\top R^{-1}A.
+\end{equation}
+For every $u$,
+\[
+u^\top G_Au=\norm{Au}_{R^{-1}}^2,
+\]
+so $\Ker G_A=\Ker A$. The form is degenerate on $\Theta$ when $A$ is not injective, but it becomes a non-degenerate metric on the identifiable quotient $\Theta/\Ker A$. The geometry is constant and flat on this quotient; it is not a non-degenerate Riemannian metric on all of $\Theta$.
+
+The weighted Moore--Penrose pseudoinverse does not reconstruct any component in $\Ker A$ \citep{penrose1955}. It resolves the non-uniqueness caused by this kernel by selecting the representative of minimum $M$-norm:
+\begin{equation}
+\theta_M^\dagger
+=
+\theta_0+M^{-1/2}\bigl(R^{-1/2}AM^{-1/2}\bigr)^\dagger R^{-1/2}(y-A\theta_0),
+\qquad M\succ0.
+\end{equation}
+A complete proof is given in Appendix~\ref{app:pseudoinverse}.
+
+\subsection{Tikhonov regularization and the soft kernel}
+Tikhonov regularization, of which Ridge is the classical statistical form \citep{tikhonov1963,hoerl1970}, is
+\begin{equation}
+E_\lambda(\theta)
+=
+\frac12\norm{A\theta-y}_{R^{-1}}^2
++
+\frac\lambda2\norm{\theta-\theta_0}_M^2
+\end{equation}
+and adds a reference geometry:
+\[
+G_\lambda=A^\top R^{-1}A+\lambda M\succ0.
+\]
+The minimizer is unique and converges, as $\lambda\downarrow0$, to $\theta_M^\dagger$. In whitened coordinates, the components are filtered by $\sigma_j/(\sigma_j^2+\lambda)$. The pseudoinverse addresses exact non-uniqueness; Ridge damps directions that are nonzero but insufficiently resolved. The operator
+\begin{equation}
+N_\lambda=\lambda(G_A+\lambda I)^{-1}
+\end{equation}
+has eigenvalues $\lambda/(\mu_j+\lambda)$ and measures continuous residual non-identifiability. Its boundary depends on noise, the reference metric, and the target risk; it cannot be inferred from the algebraic kernel alone.
+
+\subsection{An observation increases precision and contracts uncertainty}
+Consider a scalar observation
+\[
+y_i=h_i^\top\theta+\varepsilon_i,\qquad \operatorname{Var}(\varepsilon_i)=r_i>0.
+\]
+Under the exact Bayesian interpretation, we assume a Gaussian prior and conditionally independent Gaussian noise. With
+\[
+P^-=(G_S)^{-1},\qquad s_i=h_i^\top P^-h_i,
+\qquad S_i=r_i+s_i,
+\qquad \nu_i=y_i-h_i^\top\widehat\theta_S,
+\]
+the Sherman--Morrison identity \citep{sherman1950} gives
+\begin{align}
+P^+&=P^--\frac{P^-h_ih_i^\top P^-}{S_i},\label{eq:cov-update}\\
+\widehat\theta_{S+i}-\widehat\theta_S
+&=\frac{P^-h_i}{S_i}\nu_i.\label{eq:mean-update}
+\end{align}
+Thus covariance or uncertainty contracts, while precision and information increase. The image of $P^--P^+$ and the displacement both belong to $\Span(P^-h_i)$. Without Gaussianity, the same identities describe recursive Ridge or recursive least squares, but $P$ is no longer automatically an exact posterior covariance \citep{kalman1960,ollivier2017}.
+
+\subsection{Cotangent effort and displacement}
+For a smooth map $F:\Theta\to Y$, its differential $J_\theta=\dd F_\theta$ maps parametric tangent vectors to output variations. The loss provides an output covector $e_y=\dd_1\ell(F(\theta),y)$, pulled back as
+\[
+\alpha_\theta=J_\theta^*e_y\in T_\theta^*\Theta.
+\]
+A metric $g_\theta$ converts this effort into motion:
+\begin{equation}
+\dot\theta=-g_\theta^\sharp\alpha_\theta,
+\qquad
+\dot F=-J_\theta g_\theta^\sharp J_\theta^*e_y.
+\end{equation}
+Ordinary gradient, natural gradient, and Gauss--Newton steps differ through the cometric they use \citep{amari1998,ollivier2015,martens2020}. Dissipation is metric: under gradient flow, $\dd E/\dd t=-\norm{\operatorname{grad}_gE}_g^2\leq0$. If momentum is introduced, a correct mechanical formulation uses an independent mass matrix
+\[
+H(\theta,p)=\frac12p^\top M_{\rm kin}^{-1}p+E(\theta),\qquad M_{\rm kin}\succ0,
+\]
+rather than the inverse of a possibly rectangular design matrix.
+
+\subsection{Local nonlinear geometry}
+For a sample $S$, let $F_S(\theta)=(f_\theta(x_j))_{j\in S}$ and $J_S(\theta)=\dd F_S|_\theta$. A positive output metric $W_S$ induces
+\begin{equation}
+G_S^{\rm obs}(\theta)=G_0(\theta)+J_S(\theta)^*W_S(\theta)J_S(\theta).
+\end{equation}
+The tangent kernel is $\Ker J_S(\theta)$. If the rank is constant, it is tangent to the local fibers of $F_S$; if the rank varies, the geometry is stratified. For a general loss, $W_i=\dd_1^2\ell_i$ may depend on the label. The separation ``inputs construct, labels localize'' is therefore exact only when the output metric is label-independent: quadratic loss, certain canonical families, or an explicitly chosen conditional Fisher metric.
+
+The exact Hessian of the loss is not, in general, equal to $G_S^{\rm obs}$:
+\[
+H_S=G_S^{\rm obs}+\text{second-order model terms}.
+\]
+This distinction will be central to nonlinear influence. Damped Levenberg--Marquardt local models stabilize the inversion of precisely this tangent geometry \citep{levenberg1944,marquardt1963,marquardt1970}.
+
+% -----------------------------------------------------------------------------

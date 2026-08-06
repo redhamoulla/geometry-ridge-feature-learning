@@ -1,0 +1,42 @@
+\section{Protocols and Reproducibility}
+\label{app:protocols}
+\begin{table}[H]
+\centering
+\caption{Main files supplied with the sources.}
+\small
+\begin{tabularx}{\textwidth}{@{}>{\raggedright\arraybackslash\ttfamily\scriptsize}p{0.47\textwidth}X@{}}
+\toprule
+File & Role \\
+\midrule
+test\_factorization\_and\_dynamic\_strictness.py & exhaustive factorization, nonlinear collisions, and rank-one check \\
+test\_nonscalar\_orbit\_collision.py & exact rank-three collision and orthogonal rotations \\
+test\_orbit\_signature\_complementarity.py & complementarity of spectrum and spectral energies \\
+test\_nonlinear\_functional\_drift.py & functional operator and representation mobility \\
+test\_functional\_drift\_controls.py & full-network, frozen-feature, and linearized-model controls \\
+test\_stagewise\_dynamic\_register.py & early/late exposure protocol \\
+test\_local\_conditional\_surprise\_california.py & controlled local audit on California Housing \\
+test\_public\_bgr\_concrete.py & public robustness stress test on Concrete Compressive Strength \\
+select\_seloger\_robust\_hyperparameters.py & separate selection of BGR and Schweppe-type thresholds on three internal splits of the global development pool \\
+test\_bounded\_geometric\_seloger.py & Ridge/geometrically anchored Huber/geometry/BGR ablations on SeLoger \\
+test\_seloger\_baseline\_mass\_sensitivity.py & pure Huber, sensitivity of $\kappa_X$ to mass, and audit of per-listing representatives \\
+test\_schweppe\_baseline\_seloger.py & direct GM comparison with a Schweppe-type baseline \\
+\bottomrule
+\end{tabularx}
+\end{table}
+The relation between the theoretical parameter $\lambda$ in \eqref{eq:bgr-corrected} and the \texttt{alpha} parameter in \texttt{scikit-learn} must be read with the normalization actually used. For a common scale $\sigma$, $M=I$, and software objective
+\[
+\sum_i w_i(y_i-h_i^\top\theta)^2+\texttt{alpha}\,\norm\theta^2,
+\]
+the correspondence is, up to the convention for the factor $1/2$,
+\[
+\boxed{\texttt{alpha}=N_{\rm eff}\,\sigma^2\lambda.}
+\]
+The numerical \texttt{alpha} values reported in the CSV files are therefore not literally the $\lambda$ values in the theoretical bounds.
+
+The CSV and JSON outputs, together with the full-precision constants used for each table, are included in the \texttt{experiments} directory. The files \texttt{requirements.txt}, \texttt{environment.yml}, \texttt{experiment\_manifest.json}, \texttt{Makefile}, \texttt{reproduce\_all.py}, \texttt{REPRODUCIBILITY.md}, and \texttt{CHECKSUMS.sha256} describe the environment, commands, and archive integrity. The command \texttt{python reproduce\_all.py --compare-to-reference} compares CSV columns and JSON keys against the values in \texttt{reference\_outputs}, using explicit absolute and relative tolerances; PDFs are excluded from this numerical comparison. The raw SeLoger file is not redistributed; its expected name, SHA--256 hash, and schema are documented, and the script accepts its path as an argument. Transformations, seeds, development partitions, selected hyperparameters, and results on the \texttt{all}/\texttt{plausible} domains are recorded in the scripts and JSON summaries. The experiments must be read under the protocol-specific restrictions stated in Section~\ref{sec:experiments}.
+
+\phantomsection
+\renewcommand{\refname}{References}
+\bibliographystyle{plainnat}
+\bibliography{references_a,references_b,references_c}
+

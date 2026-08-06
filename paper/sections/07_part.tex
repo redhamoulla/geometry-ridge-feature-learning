@@ -1,0 +1,229 @@
+\section{Recovering Diagnostics in a Frozen Geometry}
+% -----------------------------------------------------------------------------
+\subsection{Scalar linear rank-one case}
+\label{subsec:rankone-recovery}
+Consider again an observation $y_i=h_i^\top\theta+\varepsilon_i$ with variance $r_i$, added after a context with geometry $G_S\succ0$ and estimator $\widehat\theta_S$. Define
+\begin{equation}
+s_i=h_i^\top P_Sh_i,
+\qquad
+q_i=\frac{s_i}{r_i},
+\qquad
+\nu_i=y_i-h_i^\top\widehat\theta_S,
+\qquad
+z_i=\frac{\nu_i}{\sqrt{r_i+s_i}},
+\label{eq:q-z}
+\end{equation}
+with $P_S=G_S^{-1}$. Then
+\[
+\Gamma_i=\frac{h_ih_i^\top}{r_i},
+\qquad
+\alpha_i=-\frac{h_i\nu_i}{r_i}.
+\]
+In whitened coordinates,
+\[
+w=G_S^{-1/2}h_i/\sqrt{r_i},
+\qquad
+B=ww^\top,
+\qquad
+b=-\frac{\nu_i}{\sqrt{r_i}}w.
+\]
+The unique nonzero eigenvalue of $B$ is $q_i=\norm{w}^2$, and $b$ is collinear with its eigenspace.
+
+\begin{theorem}[Exact rank-one recovery]
+In the setting above:
+\begin{align}
+\widehat\theta_{S+i}-\widehat\theta_S
+&=\frac{P_Sh_i}{r_i+s_i}\nu_i,\label{eq:rankone-d}\\
+\rho_i
+&=\frac{q_i}{1+q_i}=\frac{s_i}{r_i+s_i},\label{eq:rho}\\
+\mathcal I_{i\mid S}
+&=\frac12\log(1+q_i)=-\frac12\log(1-\rho_i),\label{eq:rankone-info}\\
+\norm{d_{i\mid S}}_{G_S}^2
+&=\rho_i z_i^2,\label{eq:rankone-contextnorm}\\
+\norm{d_{i\mid S}}_{G_S+\Gamma_i}^2
+&=\frac{\rho_i}{1-\rho_i}z_i^2.\label{eq:rankone-postnorm}
+\end{align}
+The post-insertion residual is $(1-\rho_i)\nu_i$.
+\end{theorem}
+
+\begin{proof}
+The first identity is Sherman--Morrison. The others follow from the single eigenvalue $q_i$ of $B$ and formulas \eqref{eq:canonical-register}--\eqref{eq:postnormd}. Details are given in Appendix~\ref{app:rankone}.
+\end{proof}
+
+\subsection{Important limit: equivalence to leverage and innovation magnitude}
+When $q_i>0$, the rank-one orbit signature is entirely determined by
+\begin{equation}
+q_i
+\qquad\text{and}\qquad
+\beta_{q_i}=\norm{b}^2=q_i(1+q_i)z_i^2.
+\end{equation}
+For diagnostics invariant under the orthogonal action, it is therefore equivalent to the pair
+\begin{equation}
+\boxed{(\rho_i,|z_i|).}
+\label{eq:rankone-complete-pair}
+\end{equation}
+Conversely,
+\[
+q_i=\frac{\rho_i}{1-\rho_i},
+\qquad
+|z_i|=\norm{b}\,[q_i(1+q_i)]^{-1/2}.
+\]
+The sign of $z_i$ is not contained in the orbit of $(B,b)$: in one dimension, $b$ and $-b$ are orthogonally equivalent. It must be retained separately when its interpretation matters.
+
+If $q_i=0$, then $h_i=0$ in the identifiable geometry, so $B=b=0$ regardless of the output innovation. The parametric register is zero even though $z_i=\nu_i/\sqrt{r_i}$ may be arbitrary. This case illustrates why the output diagnostic described in the preceding section must be retained.
+
+\begin{ochrebox}
+In scalar linear regression, the invariant register does not structurally generalize the classical leverage--studentized-residual-magnitude pair: it reorganizes it and links it to the tensorial objects. Strictly non-scalar richness appears when the observation has rank greater than one, when multiple outputs or targets are considered, or when trajectories are retained.
+\end{ochrebox}
+
+\subsection{Classical diagnostics as projections}
+Under the convention that residual variance is not re-estimated after deletion:
+\begin{itemize}
+  \item the regularized leverage of the point after insertion is $\ell_i=\rho_i$;
+  \item the information gain is \eqref{eq:rankone-info};
+  \item the magnitude of the studentized residual is $|z_i|$ in the orbit signature; its sign is additional output information;
+  \item Cook's distance is, up to normalization by $p$, the norm in \eqref{eq:rankone-postnorm};
+  \item the exact parametric influence function is $-H_S^{-1}\alpha_i$; when $H_S=G_S$, it coincides with $v_{i\mid S}^{\rm obs}$.
+\end{itemize}
+These relations recover the diagnostics of \citet{cook1977,hampel1974} and their local geometric interpretation \citep{cook1986,stlaurent1993}.
+
+\begin{table}[H]
+\centering
+\caption{Classical diagnostic and the corresponding operation on the register.}
+\small
+\begin{tabularx}{\textwidth}{@{}p{0.27\textwidth}X@{}}
+\toprule
+Object & Projection or extension of the register \\
+\midrule
+Leverage & eigenvalue or trace of $C$ \\
+Information gain & $\tfrac12\log\det(I+B)$ \\
+Studentized-residual magnitude & norm of the innovation in the predictive metric; sign retained separately \\
+Cook's distance & metric norm of the displacement $d$ \\
+Parametric influence & vector $-H^{-1}\alpha$; GN approximation $-G^{-1}\alpha$ \\
+Influence on a target & pairing of $v$ or $d$ with $\dd\tau$ \\
+Fisher kernel & pairing of cotangent scores in a Fisher cometric \\
+Experimental design & selection or aggregation of the tensors $\Gamma_i$ \\
+GM-estimation & clipping or weighting policy for $(\Gamma_i,\alpha_i)$ \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Semivalues under a fixed additive geometry}
+The following identities require an explicit frozen-geometry assumption.
+
+\begin{proposition}[Static contextual factorization]
+Let the tangent space be fixed, let $g_0\succ0$ be a reference metric, and let $\Gamma_j\succeq0$ be context-independent tensors. Set
+\[
+G_S=g_0+\sum_{j\in S}\Gamma_j.
+\]
+Then the marginal contribution to the intrinsic utility
+\[
+U_{\rm info}(S)=\frac12\log\det(g_0^{-1}G_S)
+\]
+is
+\begin{equation}
+U_{\rm info}(S+i)-U_{\rm info}(S)
+=
+\frac12\log\det(I+P_S\Gamma_i)
+=
+-\frac12\log\det(I-C_{i\mid S}).
+\label{eq:static-info-factor}
+\end{equation}
+For any distribution $\omega_i$ over contexts, the information semivalue is the average of this contraction:
+\begin{equation}
+\phi_i^{\rm info,\omega}
+=
+\E_{S\sim\omega_i}\left[\frac12\log\det(I+P_S\Gamma_i)\right].
+\label{eq:semivalue-info}
+\end{equation}
+\end{proposition}
+
+Shapley value, Beta--Shapley, and Banzhaf value differ through the distribution of contexts and the chosen utility \citep{ghorbani2019,kwon2022,wang2023banzhaf}. Equation \eqref{eq:semivalue-info} shows that information Shapley is a contextual average of a scalarization of the register. Volume-based and leverage-based methods lie in a directly neighboring conceptual space \citep{xu2021volume,mendozasmith2025}.
+
+For a predictive utility $U(S)=\tau(\widehat\theta_S)$ in a quadratic model, the marginal contribution is simply
+\[
+\tau(\widehat\theta_S+d_{i\mid S})-\tau(\widehat\theta_S).
+\]
+This identity organizes the factorization but is not, by itself, a deep theorem. In a fully retrained nonlinear model, $G_{S+i}$ is generally not $G_S+\Gamma_i$; the next section replaces the static identity by a path.
+
+\subsection{Strictly non-scalar generalization}
+When $\rank\Gamma_i>1$, scalar diagnostics no longer determine the orbit signature. Several scalarizations can be matched simultaneously.
+
+\begin{proposition}[Collision of five scalarizations]
+In $\R^3$ with $G=I$, there exist two local registers $A$ and $B$ such that
+\begin{equation}
+\tr C_A=\tr C_B,
+\qquad
+\log\det(I-C_A)=\log\det(I-C_B),
+\end{equation}
+\begin{equation}
+\norm{d_A}=\norm{d_B},
+\qquad
+\norm{d_A}_{(I-C_A)^{-1}}=\norm{d_B}_{(I-C_B)^{-1}},
+\qquad
+t_A^\top d_A=t_B^\top d_B,
+\end{equation}
+but $\Sigreg_A\neq\Sigreg_B$.
+\end{proposition}
+
+\begin{proof}
+Take the exact contraction spectra
+\[
+c_A=\left(\frac45,\frac35,\frac15\right),
+\]
+\[
+c_B=\left(
+\frac{29}{40}+\frac{3\sqrt{17}}{680},
+\frac{29}{40}-\frac{3\sqrt{17}}{680},
+\frac3{20}
+\right).
+\]
+The first two components of $c_B$ are the roots of
+\[
+x^2-\frac{29}{20}x+\frac{893}{1700}=0.
+\]
+The two spectra have sum $8/5$ and satisfy $\prod_j(1-c_j)=8/125$. Choose the positive components
+\[
+d_A=
+\left(
+\frac1{10},
+\sqrt{\frac{197}{500}},
+\sqrt{\frac{149}{250}}
+\right)
+\]
+and
+\[
+d_B=
+\left(
+\frac1{10},
+\sqrt{
+\frac{54258247}{229990400}
++
+\frac{6148203\sqrt{17}}{1149952000}
+},
+\sqrt{
+\frac{173432249}{229990400}
+-
+\frac{6148203\sqrt{17}}{1149952000}
+}
+\right).
+\]
+The radicands are strictly positive. Exact calculation gives
+\[
+d_{A,2}^2+d_{A,3}^2
+=d_{B,2}^2+d_{B,3}^2
+=\frac{99}{100},
+\]
+and
+\[
+\sum_j\frac{d_{A,j}^2}{1-c_{A,j}}
+=
+\sum_j\frac{d_{B,j}^2}{1-c_{B,j}}
+=\frac{89}{50}.
+\]
+The decimal values used in the numerical check are therefore evaluations of these algebraic expressions, not the definition of the collision. With $t_A=t_B=e_1$, the Euclidean norms are $1$ and the target effects are $1/10$. The spectra differ, hence the signatures differ. Under a rotation $Q$, we jointly transform $C\mapsto QCQ^\top$, $d\mapsto Qd$, and $t\mapsto Qt$; the effect $t^\top d$ is therefore exactly preserved.
+\end{proof}
+
+This construction proves simultaneous non-injectivity, not merely the existence of two directions with the same norm. It is verified numerically in Section~\ref{subsec:experiments-nonscalar}.
+
+% -----------------------------------------------------------------------------

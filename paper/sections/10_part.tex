@@ -1,0 +1,129 @@
+\section{Experiments}
+\label{sec:experiments}
+% -----------------------------------------------------------------------------
+\subsection{Status of the experiments}
+The experiments are organized into four distinct categories. This distinction prevents conflating an identity check, a constructive counterexample, a mechanism validation, and a predictive comparison:
+\begin{enumerate}
+  \item \textbf{implementation verification}: exact identities are recomputed through two independent routes;
+  \item \textbf{strictness experiment}: collisions are constructed so that several scalarizations are exactly identical;
+  \item \textbf{mechanism validation}: controlled corruptions separately test observability and innovation;
+  \item \textbf{negative control}: results in which the register does not outperform a simpler baseline are retained.
+\end{enumerate}
+The repeated splits of California Housing, Concrete, and SeLoger overlap; their dispersions and paired comparisons are therefore descriptive rather than inferential claims based on fully independent replications. The Friedman experiments use independently generated datasets. Scripts, seeds, and aggregated outputs are provided with the sources.
+
+\subsection{Exact factorization and rank-one equivalence}
+\label{subsec:experiments-factorization}
+In a Ridge problem with dimension $p=4$, nine anchor observations, eight candidate observations, and $250$ validation points, all $2^8$ coalitions are enumerated exactly. The experiment is repeated over forty independent problems. For every context and candidate, the marginal contribution is computed both by refitting Ridge and from the register.
+
+\begin{table}[H]
+\centering
+\caption{Numerical verification of the factorization identities.}
+\label{tab:exact-factorization}
+\small
+\begin{tabular}{@{}lcc@{}}
+\toprule
+Identity & Maximum absolute error & Rank correlation \\
+\midrule
+Information Shapley / mean contraction & $4.44\times10^{-16}$ & $1.000$ \\
+Quadratic predictive Shapley / mean displacement & $1.89\times10^{-15}$ & $1.000$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[htbp]
+\centering\fbox{\parbox{0.88\linewidth}{\centering Figure 1 is available in the compiled Version 7 manuscript.}}
+\caption{Experimental figure 1.}\label{fig:factorization-exact}
+\end{figure}
+
+This experiment does not replace the proof; it verifies the implementation. A second check targets the rank-one limit discussed in Equation~\eqref{eq:rankone-complete-pair}. Across the $108$ pairs in the nonlinear experiment described below, $|z|$ is reconstructed from $(\rho,\norm b)$ with maximum error $5.33\times10^{-15}$, and $\norm b$ from $(\rho,|z|)$ with maximum error $1.42\times10^{-14}$. Thus, in this scalar regime, the final two-coordinate register contains no more information than the classical leverage--studentized-innovation pair.
+
+\subsection{Controlled non-scalar collision}
+\label{subsec:experiments-nonscalar}
+The collision proposition from the preceding section is turned into an experiment with no statistical noise. Two classes of rank-three registers have exactly:
+\begin{itemize}
+  \item the same contraction trace;
+  \item the same information gain;
+  \item the same Euclidean displacement norm;
+  \item the same displacement norm in the post-insertion geometry;
+  \item the same effect on a fixed target.
+\end{itemize}
+The two pairs are subjected to $400$ joint random orthogonal rotations. The target is co-rotated with the register, $t\mapsto Qt$, so the target effect remains invariant. Raw coordinates therefore carry no class information. The maximum absolute differences between the five scalarizations, computed using the full-precision constants above, are below $1.6\times10^{-15}$.
+
+\begin{table}[H]
+\centering
+\caption{Classification of the two register classes after random rotations.}
+\label{tab:nonscalar-collision}
+\small
+\begin{tabular}{@{}lc@{}}
+\toprule
+Representation & AUC \\
+\midrule
+Five matched scalar summaries & $0.500$ \\
+Contraction spectrum & $1.000$ \\
+Effort distribution across eigenspaces & $1.000$ \\
+Complete orbit signature & $1.000$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[htbp]
+\centering\fbox{\parbox{0.88\linewidth}{\centering Figure 2 is available in the compiled Version 7 manuscript.}}
+\caption{Experimental figure 2.}\label{fig:nonscalar-collision}
+\end{figure}
+
+This experiment establishes what the scalar experiment could not: the register's own richness appears when observation rank exceeds one. It relies neither on an easily detected synthetic corruption nor on a circular selection of rare points.
+
+\subsection{Complementarity of spectrum and energies}
+The previous collision shows that five scalar summaries are insufficient, but each half of the signature still separated the two classes. We therefore add a four-mechanism factorial protocol: two contraction spectra are crossed with two effort-energy distributions. The binary label is the XOR of the two choices; by construction, spectrum alone and energies alone are each independent of the label. Four hundred joint rotations are used.
+
+\begin{table}[H]
+\centering
+\caption{Complementarity of the orbit-signature components.}
+\label{tab:signature-complementarity}
+\small
+\begin{tabular}{@{}lcc@{}}
+\toprule
+Representation & XOR AUC & Four-mechanism accuracy \\
+\midrule
+Spectrum alone & $0.500$ & $0.500$ \\
+Spectral energies alone & $0.500$ & $0.500$ \\
+Complete signature & $1.000$ & $1.000$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[htbp]
+\centering\fbox{\parbox{0.88\linewidth}{\centering Figure 3 is available in the compiled Version 7 manuscript.}}
+\caption{Experimental figure 3.}\label{fig:signature-complementarity}
+\end{figure}
+
+The maximum numerical recovery error is $8.9\times10^{-16}$ for eigenvalues and $5.8\times10^{-15}$ for energies. For the binary XOR, AUC $0.5$ is chance. For four-mechanism classification, the $0.5$ accuracy of the partial representations is insufficient but above the uniform chance level $0.25$; it precisely reflects the fact that each component separates half of the classes. This control certifies complementarity of the two components of the complete invariant; it does not claim that this artificial classification is a real audit task.
+
+\subsection{Scalar collisions in a nonlinear network}
+Across six independent Friedman~\#1 datasets, a tanh network $10\to10\to1$ is trained on $500$ anchor observations. For each of $18$ base points, a label corruption and a covariate corruption are matched to produce nearly the same final tangent predictive attribution. The median relative matching error is $1.82\,\%$. All discriminative validations are grouped at the level of the independent Friedman dataset: observations from the same seed remain in the same fold using \texttt{GroupKFold}.
+
+\begin{table}[H]
+\centering
+\caption{Distinguishing the corruption mechanism when final predictive attribution is matched.}
+\label{tab:matched-collision}
+\small
+\begin{tabular}{@{}lc@{}}
+\toprule
+Representation & AUC \\
+\midrule
+Final predictive attribution, scalar & $0.499$ \\
+Final functional impact, scalar & $0.442$ \\
+Trajectory of scalar attribution & $0.564$ \\
+Final pair $(\rho,\zeta)$ & $0.869$ \\
+Trajectory of the pair & $0.879$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[htbp]
+\centering\fbox{\parbox{0.88\linewidth}{\centering Figure 4 is available in the compiled Version 7 manuscript.}}
+\caption{Experimental figure 4.}\label{fig:matched-collision}
+\end{figure}
+
+This experiment validates the information loss induced by a single predictive attribution. It does not establish novelty relative to the classical leverage--residual pair: as shown by the rank-one equivalence, the final pair $(\rho,\zeta)$ is precisely a geometric reorganization of that classical diagnostic. Its role here is interpretive: it separates the mechanism carried by the covariates from the mechanism carried by the label.
+

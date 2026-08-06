@@ -1,0 +1,141 @@
+\section{Observation Qualification and Robustness}
+% -----------------------------------------------------------------------------
+\subsection{A passport, not a single weight}
+The local register may be supplemented with information not contained in the relative quadratic datum alone:
+\begin{equation}
+\Qreg_{i\mid S}
+=
+\bigl(
+\Sigreg_{i\mid S},
+ c_i,
+ e_i^{\rm loss,0},
+ e_i^{\rm par,0},
+\pi_i,
+\chi_i,
+\zeta_i^{\rm local}
+\bigr).
+\end{equation}
+Here $c_i=\ell_i(\widehat\theta_S)$ retains the loss constant, $e_i^{\rm loss,0}$ is the component invisible to output curvature, $e_i^{\rm par,0}$ is the component annihilated by $J_i^*$, $\pi_i$ is statistical mass or known dependence, $\chi_i\in[0,1]$ is the structural validity of the covariates, and $\zeta_i^{\rm local}$ is the label discordance relative to a neighborhood or conditional model. These coordinates answer different questions:
+\begin{itemize}
+  \item $\Gamma_i$ or $C_{i\mid S}$: what does the point make observable?
+  \item $\alpha_i$ or the innovation: what does its label demand?
+  \item $d_i$: what does it do to the local model?
+  \item $\chi_i$: do its covariates belong to the admissible domain?
+  \item $\pi_i$: how many independent statistical events does it represent?
+\end{itemize}
+Prematurely merging them into a scalar weight may discard a rare but valid point or overvalue a redundant observation.
+
+\subsection{Local conditional surprise}
+In a misspecified global linear model, a large residual may reflect local nonlinearity rather than an erroneous label. One correction is to compare the point's innovation with those of neighbors defined in a geometric distance, for example
+\begin{equation}
+d_G(i,j)^2=(x_i-x_j)^\top P_x(x_i-x_j),
+\end{equation}
+and then robustly center and normalize the residual by the neighborhood median and MAD. The experimental protocol uses the algebraic deleted-residual identity for Ridge at fixed hyperparameter, excludes the point itself from its neighborhood, and selects local parameters on a clean validation set. It is not a full $K$-fold cross-fitting procedure; this clarifies an overly broad formulation in the previous version. The score is not intrinsic without a chosen representation and neighborhood. The California Housing experiment will show its value for weak corruptions, but also the failure of automatically turning it into a loss weight.
+
+\subsection{Covariate anomalies and semantic validity}
+A covariate may be anomalous because of magnitude, conditional inconsistency, or a domain violation. A zero area is not necessarily large in norm after transformation, yet it is semantically impossible. One must therefore distinguish
+\[
+\text{large relative contraction}
+\quad\text{from}\quad
+\text{structural invalidity}.
+\]
+The gate $\chi_i$ may combine domain rules, a cellwise detector, or a conditional model. Cellwise robust regression methods are direct prior work here \citep{filzmoser2020}. The register does not automatically reconstruct the true covariate; it indicates where an observation geometry would be built on a doubtful input.
+
+\subsection{Intrinsic contraction and innovation budgets}
+In whitened coordinates, let $B=U\diag(\lambda_j)U^\top$ and $b=G^{-1/2}\alpha$. A robust policy may bound second and first order separately:
+\begin{equation}
+\widetilde B
+=U\diag(\min(\lambda_j,\kappa_X))U^\top,
+\qquad
+\widetilde b
+=
+\begin{cases}
+0,& b=0,\\[1mm]
+\displaystyle \min\left(1,\frac{\kappa_Y}{\norm b}\right)b,& b\neq0.
+\end{cases}
+\label{eq:intrinsic-clipping}
+\end{equation}
+The admitted local displacement is
+\begin{equation}
+\widetilde d=-(I+\widetilde B)^{-1}\widetilde b.
+\end{equation}
+Then
+\[
+\spec\bigl(\widetilde B(I+\widetilde B)^{-1}\bigr)
+\subset\left[0,\frac{\kappa_X}{1+\kappa_X}\right],
+\qquad
+\norm{\widetilde d}\leq\kappa_Y.
+\]
+This construction bounds relative contraction and displacement in the current geometry. It is a local operator; it does not automatically define the gradient of an integrable global objective.
+
+\subsection{Linear prototype with bounded geometry}
+To illustrate the idea with a convex estimator, fix a background metric $M\succ0$, scales $\sigma_i$, and
+\[
+u_i^2=\frac{h_i^\top M^{-1}h_i}{\sigma_i^2},
+\qquad
+a_i^X=
+\begin{cases}
+1,&u_i=0,\\[1mm]
+\displaystyle\min\left(1,\frac{\kappa_X^2}{u_i^2}\right),&u_i>0.
+\end{cases}
+\]
+With a Huber loss $\rho_{\kappa_Y}$, validity $\chi_i$, and mass $\pi_i$, define
+\begin{equation}
+\widehat\theta_{\rm BGR}
+=
+\arg\min_\theta
+\left\{
+\frac\lambda2\norm{\theta-\theta_0}_M^2
++
+\frac{1}{N_{\rm eff}}
+\sum_{i=1}^n
+\pi_i\chi_i a_i^X
+\rho_{\kappa_Y}\left(\frac{y_i-h_i^\top\theta}{\sigma_i}\right)
+\right\},
+\label{eq:bgr-corrected}
+\end{equation}
+with
+\begin{equation}
+N_{\rm eff}=\sum_{i=1}^n\pi_i.
+\label{eq:effective-mass}
+\end{equation}
+The factor $1/N_{\rm eff}$ corrects the normalization error in the previous version. The outer weight $a_i^X$ combined with a bounded residual score places this prototype exactly in the family of regularized Mallows-type GM-estimators; no algorithmic novelty is claimed \citep{huber1964,mallows1975,krasker1982,richardson1997}.
+
+\begin{proposition}[Individual bounds]
+Assume the preprocessing, $M$, $\sigma_i$, $\pi_i$, $\chi_i$, $\kappa_X$, and $\kappa_Y$ are fixed. The contribution of point $i$ to the gradient of the empirical part of \eqref{eq:bgr-corrected} satisfies
+\begin{equation}
+\norm{g_i(\theta)}_{M^{-1}}
+\leq
+\frac{\pi_i}{N_{\rm eff}}\kappa_X\kappa_Y.
+\label{eq:gradient-bound}
+\end{equation}
+Almost everywhere, its positive Hessian contribution satisfies
+\begin{equation}
+\norm{M^{-1/2}H_i(\theta)M^{-1/2}}_{\rm op}
+\leq
+\frac{\pi_i}{N_{\rm eff}}\kappa_X^2.
+\label{eq:hessian-bound}
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+The derivative of the Huber loss is bounded by $\kappa_Y$. Moreover, $a_i^Xu_i\leq\kappa_X$ and $a_i^Xu_i^2\leq\kappa_X^2$. Both inequalities follow after multiplication by $\pi_i\chi_i/N_{\rm eff}\leq\pi_i/N_{\rm eff}$.
+\end{proof}
+
+\begin{corollary}[Replacement stability under fixed structure]
+Consider two datasets $D$ and $D'$ using the same preprocessing, metric $M$, scales $\sigma_i$, validity rules $\chi_i$, thresholds $\kappa_X,\kappa_Y$, group structure, and denominator $N_{\rm eff}$. Assume further that common observations retain their masses $\pi_i$, that the replaced observations have total mass at most $m$, and that both objectives are $\lambda$-strongly convex in the metric $M$. Then
+\begin{equation}
+\norm{\widehat\theta(D)-\widehat\theta(D')}_M
+\leq
+\frac{2m\kappa_X\kappa_Y}{\lambda N_{\rm eff}}.
+\label{eq:replacement-stability}
+\end{equation}
+The bound is independent of the magnitude of the replaced covariates and labels.
+\end{corollary}
+
+This bound belongs to algorithmic stability in the broad sense \citep{bousquet2002}. It does not apply unchanged if replacement modifies grouping, preprocessing parameters, scales, thresholds, or effective normalization, because the contributions of common observations then change as well. It does not by itself guarantee lower out-of-sample risk; it formalizes saturation of sensitivity to gross contamination under a fixed auxiliary state.
+
+\subsection{Duplicates: a question of mass, not noise}
+An exact copy is not necessarily anomalous. If a reliable identifier establishes that $m_g$ rows represent the same statistical event $g$, set $\pi_i=1/m_g$ for $i\in g$. Then the total group mass is $1$, and because of normalization \eqref{eq:effective-mass}, the objective is invariant to the number of copies. Without group information, numerical equality cannot distinguish a software duplicate from genuinely independent identical measurements. Robustness to replication has its own literature, notably volume-based valuation \citep{xu2021volume}. It is an auxiliary module here, not the center of the contribution.
+
+% -----------------------------------------------------------------------------

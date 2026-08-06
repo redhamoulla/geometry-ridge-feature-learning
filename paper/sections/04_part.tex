@@ -1,0 +1,106 @@
+\section{Relative Quadratic Datum and Complete Orbit Signature}
+% -----------------------------------------------------------------------------
+\subsection{Local definition and scope}
+Fix a point $\widehat\theta_S$ that minimizes the context loss for $S$. In the tangent space $V=T_{\widehat\theta_S}\Theta$, assume a positive-definite geometry $G_S:V\to V^*$, denoted $G_S\succ0$, and, for observation $i$,
+\begin{equation}
+\alpha_i=\dd\ell_i|_{\widehat\theta_S}\in V^*,
+\qquad
+\Gamma_i=J_i^*W_iJ_i:V\to V^*,
+\qquad \Gamma_i\succeq0.
+\end{equation}
+The quadratic insertion model is
+\begin{equation}
+Q_{i\mid S}(\delta)
+=
+\frac12\inner{\delta}{G_S\delta}
++
+\inner{\alpha_i}{\delta}
++
+\frac12\inner{\delta}{\Gamma_i\delta}.
+\label{eq:local-quadratic-model}
+\end{equation}
+
+\begin{definition}[Relative quadratic observation datum]
+The \emph{relative quadratic datum} of point $i$ in context $S$ is the decorated triplet
+\begin{equation}
+\boxed{\Jreg_{i\mid S}=(G_S,\Gamma_i,\alpha_i).}
+\label{eq:decorated-relative-data}
+\end{equation}
+The separation between the collective geometry $G_S$ and the point-specific increment $\Gamma_i$ is part of the object.
+\end{definition}
+
+\begin{remark}[Why we no longer use the term ``2-jet'']
+A second-order jet in the standard sense contains the value, first order, and full second order of a map, together with the transformation laws of jet bundles \citep{saunders1989}. The triplet \eqref{eq:decorated-relative-data} contains neither the value $\ell_i(\widehat\theta_S)$ nor the exact Hessian of $\ell_i$, and $G_S$ belongs to the context. It is therefore a Gauss--Newton datum decorated by the context, not a second-order jet in the usual geometric sense.
+\end{remark}
+
+Setting $P_S=G_S^{-1}$, the derived practical objects are
+\begin{equation}
+R_{i\mid S}=P_S\Gamma_i,
+\qquad
+C_{i\mid S}=R_{i\mid S}(I+R_{i\mid S})^{-1},
+\label{eq:R-C}
+\end{equation}
+\begin{equation}
+v_{i\mid S}^{\rm obs}=-P_S\alpha_i,
+\qquad
+d_{i\mid S}^{\rm obs}=-(G_S+\Gamma_i)^{-1}\alpha_i.
+\label{eq:v-d}
+\end{equation}
+The first vector is the infinitesimal response of the local Gauss--Newton model; the second is its finite minimizer. They are the exact statistical influence only when $G_S$ coincides with the exact Hessian of the context.
+
+\begin{remark}[Overcomplete practical register, loss constant, and output information]
+The register
+\[
+\Areg_{i\mid S}
+=(\Gamma_i,\alpha_i,R_{i\mid S},C_{i\mid S},v_{i\mid S}^{\rm obs},d_{i\mid S}^{\rm obs})
+\]
+is deliberately overcomplete. Its generator remains $\Jreg_{i\mid S}$. The latter is complete for the \emph{parametric action of the declared Gauss--Newton quadratic model, up to an additive constant}. A utility that depends on the absolute loss value additionally requires
+\[
+c_i=\ell_i(\widehat\theta_S).
+\]
+This scalar belongs to the extended passport, but not to the tensorial core of the register.
+
+The register does not contain the entire output error. Two distinct forms of invisibility must be separated. First, if $W_i:T_yY_i\to T_y^*Y_i$ is singular, choose an auxiliary metric
+\[
+h_i^\flat:T_yY_i\longrightarrow T_y^*Y_i,
+\qquad h_i^\sharp=(h_i^\flat)^{-1},
+\]
+and set
+\[
+\widetilde W_i=W_i h_i^\sharp:T_y^*Y_i\longrightarrow T_y^*Y_i.
+\]
+The endomorphism $\widetilde W_i$ is self-adjoint with respect to the dual metric induced by $h_i$. Consequently,
+\[
+T_y^*Y_i=\Img\widetilde W_i\oplus^{\perp_{h_i^{-1}}}\Ker\widetilde W_i,
+\]
+and
+\[
+e_i=e_i^{\rm loss,1}+e_i^{\rm loss,0},
+\qquad
+e_i^{\rm loss,1}\in\Img\widetilde W_i,
+\quad
+e_i^{\rm loss,0}\in\Ker\widetilde W_i.
+\]
+The component visible to the loss curvature can be measured by
+\[
+\norm{e_i^{\rm loss,1}}_{W_{i,h}^{\dagger}}^2
+=\inner{e_i^{\rm loss,1}}{W_{i,h}^{\dagger}e_i^{\rm loss,1}},
+\]
+where $W_{i,h}^{\dagger}:T_y^*Y_i\to T_yY_i$ is the pseudoinverse defined relative to $h_i$.
+
+Second, parametric invisibility is governed by
+\[
+\Ker J_i^*\subset T_y^*Y_i.
+\]
+It is independent of the previous notion: a covector may be well measured by $W_i$ yet annihilated by the pullback. We therefore also retain
+\[
+\boxed{
+ e_i^{\rm par,0}
+ =\Pi_{\Ker J_i^*}^{\,h_i^{-1}}e_i,
+ \qquad
+ e_i^{\rm par,1}=e_i-e_i^{\rm par,0}.
+}
+\]
+Only $e_i^{\rm par,1}$ contributes to $\alpha_i=J_i^*e_i$. The extended passport may therefore report $c_i$, $e_i^{\rm loss,0}$, and $e_i^{\rm par,0}$ separately. The projectors $\Pi_{\Ker\widetilde W_i}$ and $\Pi_{\Ker J_i^*}$ do not generally commute, however. The two invisible components are therefore overlapping marginal diagnostics, not terms in a common orthogonal partition of the error; their norms must not be added as a variance decomposition. If $W_i\succ0$, one may simply use $\norm{e_i}_{W_i^{-1}}$; an independent audit metric $H_i\succ0$ is also possible.
+\end{remark}
+

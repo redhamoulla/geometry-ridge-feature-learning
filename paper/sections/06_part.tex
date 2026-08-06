@@ -1,0 +1,161 @@
+\subsection{Generic low-rank strata}
+Let $1\leq r<p$ and $q=p-r$. We consider pairs $(B,b)$ such that $B\succeq0$ has exactly $r$ simple positive eigenvalues
+\[
+0<\lambda_1<\cdots<\lambda_r,
+\]
+a kernel $E_0=\Ker B$ of dimension $q$, and energies
+\[
+\beta_j=\norm{\Pi_{\lambda_j}b}^2>0,
+\qquad
+\beta_0=\norm{\Pi_0b}^2>0.
+\]
+
+\begin{proposition}[Generic rank-$r$ stratum]
+On this stratum, the orbit space under $O(p)$ is globally parameterized by
+\begin{equation}
+\boxed{
+(\lambda_1,\ldots,\lambda_r,
+ \beta_1,\ldots,\beta_r,\beta_0)
+\in
+\Lambda_r\times(\R_{>0})^{r+1},
+}
+\label{eq:rank-r-stratum}
+where $\Lambda_r=\{0<\lambda_1<\cdots<\lambda_r\}$. It therefore has dimension $2r+1$. Every orbit admits the canonical representative
+\begin{equation}
+B=\diag(\lambda_1,\ldots,\lambda_r,0,\ldots,0),
+\qquad
+b=(\sqrt{\beta_1},\ldots,\sqrt{\beta_r},\sqrt{\beta_0},0,\ldots,0)^\top.
+\label{eq:rank-r-canonical}
+\end{equation}
+\label{prop:rank-r-stratum}
+\end{proposition}
+
+\begin{proof}
+Theorem~\ref{thm:orbit-classification} already shows that the quantities in \eqref{eq:rank-r-stratum} classify the orbits. Conversely, order the positive eigenspaces, choose the sign of each eigenvector so that the corresponding component of $b$ is positive, and use the transitive action of $O(E_0)$ on the sphere of radius $\sqrt{\beta_0}$ to align the kernel component with the first axis of $E_0$. This yields \eqref{eq:rank-r-canonical}, unique modulo the stabilizer $O(q-1)$ acting on the orthogonal complement of this component without changing the pair. The canonical section and the invariants identify the orbit space globally with the domain in \eqref{eq:rank-r-stratum}.
+\end{proof}
+
+The component $\beta_0$ measures a first-order effort in a direction along which the observation supplies no Gauss--Newton curvature. It is therefore not a merely algebraic detail: it distinguishes an effort compatible with quadratic observability from an effort carried by the kernel of $B$.
+
+\begin{corollary}[Compatible stratum]
+Under the additional assumption
+\[
+b\in\Img B,
+\]
+one has $\beta_0=0$. The generic compatible stratum is globally parameterized by
+\[
+(\lambda_1,\ldots,\lambda_r,
+ \beta_1,\ldots,\beta_r)
+\in\Lambda_r\times(\R_{>0})^r
+\]
+and has dimension $2r$.
+\label{cor:compatible-stratum}
+\end{corollary}
+
+\begin{lemma}[Effort--curvature compatibility]
+In finite dimension, if $W_i\succ0$, then
+\begin{equation}
+\boxed{
+\alpha_i=J_i^*e_i\in\Img\Gamma_i,
+\qquad
+\Gamma_i=J_i^*W_iJ_i.
+}
+\label{eq:compatibility-lemma}
+\end{equation}
+More generally, if $W_i\succeq0$ and $e_i\in\Img W_i$, the same conclusion holds. After whitening, $b\in\Img B$.
+\label{lem:effort-curvature-compatibility}
+\end{lemma}
+
+\begin{proof}
+If $W_i\succ0$, then $\Ker\Gamma_i=\Ker J_i$. For a positive self-adjoint operator in finite dimension,
+\[
+\Img\Gamma_i=(\Ker\Gamma_i)^\circ,
+\]
+whereas $\Img J_i^*=(\Ker J_i)^\circ$. Hence $\Img\Gamma_i=\Img J_i^*$, and $\alpha_i=J_i^*e_i$ belongs to this image. If $W_i\succeq0$ and $e_i=W_iu$, set $A=W_i^{1/2}J_i$ in a declared auxiliary metric. Then $\Gamma_i=A^*A$ and $\alpha_i=A^*W_i^{1/2}u$. Since $\Img(A^*A)=\Img A^*$ in finite dimension, the result follows. Whitening is an isomorphism and preserves membership in the corresponding images.
+\end{proof}
+
+\begin{remark}[Scalar case]
+For a non-degenerate scalar quadratic observation, $r\leq1$ and Lemma~\ref{lem:effort-curvature-compatibility} forces the compatible stratum. When $r=1$, the quotient therefore has exactly two parameters. The recovery result in Section~\ref{subsec:rankone-recovery} will show that they can be chosen as the conditional leverage $\rho_i$ and the magnitude of the studentized innovation $|z_i|$. Thus the $2p$-parameter principal quotient is not the relevant case for a scalar observation: it serves as a reference stratum for the general theorem, whereas the low-rank stratum is the dominant applied case.
+\end{remark}
+
+\subsection{Quotient property and the role of decoration}
+\begin{corollary}[Factorization of invariant diagnostics]
+Let $F$ be a function of the decorated relative quadratic datum $(G,\Gamma,\alpha)$ that is constant under the reparameterization laws \eqref{eq:covariance-laws}. Then there exists a unique function $\bar F$ defined on the \emph{image} of the signature such that
+\begin{equation}
+F(G,\Gamma,\alpha)
+=\bar F\bigl(\Sigreg(L^{-\top}\Gamma L^{-1},L^{-\top}\alpha)\bigr),
+\end{equation}
+where $L:(V,G)\to(\R^p,I)$ is any isometry.
+\end{corollary}
+\begin{proof}
+After whitening, invariance means that $F$ is constant on orthogonal orbits. Theorem~\ref{thm:orbit-classification} identifies these orbits with the fibers of $\Sigreg$. The universal property of the quotient defines $\bar F$ on the image of the signature and ensures uniqueness there.
+\end{proof}
+
+\begin{remark}[The total quadratic function is not sufficient]
+The decoration $(G,\Gamma,\alpha)$ is essential. In dimension one, $(G_1,\Gamma_1,\alpha_1)=(1,1,0)$ and $(G_2,\Gamma_2,\alpha_2)=(3/2,1/2,0)$ define the same total function $Q(\delta)=\delta^2$, but their whitened ratios are $B_1=1$ and $B_2=1/3$, so their relative contractions are respectively $1/2$ and $1/4$. The register distinguishes the geometry already acquired from the information added by the point.
+\end{remark}
+
+\subsection{Derived tensorial register}
+In a whitened frame,
+\begin{equation}
+\bar C=B(I+B)^{-1},
+\qquad
+\bar v=-b,
+\qquad
+\bar d=-(I+B)^{-1}b.
+\label{eq:canonical-register}
+\end{equation}
+The signature reconstructs their \emph{orbits}, spectra, energies by eigenspace, and all invariant scalarizations; it does not reconstruct a particular oriented vector in the original tangent space. Displaying a parametric direction requires retaining a representative of $(G,\Gamma,\alpha)$.
+
+Several common scalarizations are
+\begin{align}
+\tr \bar C
+&=\sum_\lambda m_\lambda\frac{\lambda}{1+\lambda},\label{eq:traceC}\\
+\mathcal I
+&=\frac12\log\det(I+B)
+=\frac12\sum_\lambda m_\lambda\log(1+\lambda),\label{eq:infoB}\\
+\norm{\bar v}^2
+&=\sum_\lambda\beta_\lambda,\label{eq:normv}\\
+\norm{\bar d}^2
+&=\sum_\lambda\frac{\beta_\lambda}{(1+\lambda)^2},\label{eq:normd}\\
+\norm{\bar d}_{I+B}^2
+&=\sum_\lambda\frac{\beta_\lambda}{1+\lambda}.\label{eq:postnormd}
+\end{align}
+These maps are non-injective: they aggregate the spectrum or the distribution of effort.
+
+\subsection{Multiple targets: spectral Gram matrices}
+Influence on a target $\tau$ requires the whitened covector $t=L^{-\top}\dd\tau$. For $k$ targets $t_1,\dots,t_k$, define in each eigenspace
+\[
+Z_\lambda=
+\bigl[\Pi_\lambda b,\Pi_\lambda t_1,\dots,\Pi_\lambda t_k\bigr],
+\qquad
+\mathcal G_\lambda=Z_\lambda^\top Z_\lambda.
+\]
+
+\begin{theorem}[Classification with targets]
+The orbit of $(B,b,t_1,\dots,t_k)$ under the joint orthogonal action is completely characterized by
+\begin{equation}
+\bigl\{(\lambda,m_\lambda,\mathcal G_\lambda)\bigr\}_{\lambda\in\spec(B)}.
+\label{eq:target-signature}
+\end{equation}
+\end{theorem}
+\begin{proof}
+Within each eigenspace, two finite families of vectors are related by an orthogonal isometry if and only if their Gram matrices coincide. Construct these isometries eigenspace by eigenspace, then take their orthogonal direct sum.
+\end{proof}
+For a single target, the $2\times2$ matrix retains $\norm{\Pi_\lambda b}^2$, $\norm{\Pi_\lambda t}^2$, and their signed cross-product. It therefore recovers $t^\top\bar v$ or $t^\top\bar d$ without losing relative orientation.
+
+\subsection{Composition limit across observations}
+The signature classifies an observation \emph{in a fixed context}. It is not sufficient to reconstruct the relative angles among several prospective observations. With $G=I_2$ and zero efforts, the families
+\[
+B_1=e_1e_1^\top,\quad B_2=e_1e_1^\top
+\qquad\text{and}\qquad
+B'_1=e_1e_1^\top,\quad B'_2=e_2e_2^\top
+\]
+have the same individual signatures, but
+\[
+B_1+B_2=\diag(2,0),
+\qquad
+B'_1+B'_2=I_2.
+\]
+Experimental design, joint selection, and redundancy among points therefore require the tensors in a common frame or simultaneous invariants; they cannot be recovered from the collection of individual signatures alone.
+
+% -----------------------------------------------------------------------------

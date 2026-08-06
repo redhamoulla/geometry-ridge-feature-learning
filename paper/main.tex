@@ -1,0 +1,117 @@
+\documentclass[10pt,a4paper]{article}
+
+\usepackage[a4paper,left=2.15cm,right=2.15cm,top=2.05cm,bottom=1.90cm,headheight=14pt,headsep=8pt,footskip=22pt]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage[authoryear,round]{natbib}
+\usepackage[english]{babel}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb,mathtools,amsthm,mathrsfs,bm}
+\usepackage{booktabs,tabularx,array,multirow}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{float}
+\usepackage[most]{tcolorbox}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage{bookmark}
+
+\definecolor{navy}{HTML}{153B5A}
+\definecolor{teal}{HTML}{197A70}
+\definecolor{ochre}{HTML}{B27612}
+\definecolor{slate}{HTML}{5E7080}
+\definecolor{paleblue}{HTML}{EDF3F6}
+\definecolor{paleteal}{HTML}{EEF7F5}
+\definecolor{paleochre}{HTML}{FBF5EA}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=navy,
+  citecolor=teal,
+  urlcolor=teal,
+  pdftitle={Conditional Geometric Register of Observations: From Ridge to Feature Learning},
+  pdfauthor={Redha Moulla},
+  pdfsubject={Conditional invariants, observation diagnostics, nonlinear dynamics, and structural robustness},
+  pdfkeywords={ridge, Tikhonov, observation, leverage, influence, Cook, Shapley, robustness, Jacobian, feature learning}
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\sffamily\small Conditional Geometric Register of Observations}
+\fancyhead[R]{\sffamily\small Redha Moulla}
+\fancyfoot[C]{\sffamily\small\thepage}
+\renewcommand{\headrulewidth}{0.35pt}
+
+\titleformat{\section}{\sffamily\bfseries\color{navy}\fontsize{15}{18}\selectfont}{\thesection}{0.72em}{}
+\titlespacing*{\section}{0pt}{1.30ex plus .4ex minus .2ex}{0.55ex}
+\titleformat{\subsection}{\sffamily\bfseries\color{navy}\fontsize{12.1}{14.3}\selectfont}{\thesubsection}{0.62em}{}
+\titlespacing*{\subsection}{0pt}{1.05ex plus .35ex minus .2ex}{0.35ex}
+\titleformat{\subsubsection}{\sffamily\bfseries\color{navy}\normalsize}{\thesubsubsection}{0.52em}{}
+\titlespacing*{\subsubsection}{0pt}{0.9ex}{0.25ex}
+
+\setlength{\parindent}{1.10em}
+\setlength{\parskip}{0.05em}
+\setlength{\abovedisplayskip}{7pt plus 2pt minus 2pt}
+\setlength{\belowdisplayskip}{7pt plus 2pt minus 2pt}
+\setlist[itemize]{leftmargin=1.7em,itemsep=0.20em,topsep=0.25em}
+\setlist[enumerate]{leftmargin=2.0em,itemsep=0.24em,topsep=0.28em}
+\captionsetup{font=small,labelfont=bf,justification=centering}
+
+\newtcolorbox{abstractbox}{enhanced,breakable,colback=paleblue,colframe=navy,boxrule=0.8pt,arc=2.6mm,left=6mm,right=6mm,top=4.5mm,bottom=4.5mm}
+\newtcolorbox{tealbox}[1][]{enhanced,breakable,colback=paleteal,colframe=teal,boxrule=0.75pt,arc=2mm,left=5mm,right=5mm,top=3mm,bottom=3mm,#1}
+\newtcolorbox{ochrebox}[1][]{enhanced,breakable,colback=paleochre,colframe=ochre,boxrule=0.75pt,arc=2mm,left=5mm,right=5mm,top=3mm,bottom=3mm,#1}
+\newtcolorbox{statementbox}[1]{enhanced,breakable,colback=white,colframe=teal,colbacktitle=teal,coltitle=white,fonttitle=\sffamily\bfseries,title={#1},boxrule=0.75pt,arc=1.5mm,left=5mm,right=5mm,top=3mm,bottom=3mm}
+\newtcolorbox{resultbox}[1]{enhanced,breakable,colback=paleochre,colframe=ochre,colbacktitle=ochre,coltitle=white,fonttitle=\sffamily\bfseries,title={#1},boxrule=0.75pt,arc=1.5mm,left=5mm,right=5mm,top=3mm,bottom=3mm}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\renewcommand{\proofname}{Proof}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Ker}{\operatorname{ker}}
+\newcommand{\Img}{\operatorname{im}}
+\newcommand{\rank}{\operatorname{rank}}
+\newcommand{\tr}{\operatorname{tr}}
+\newcommand{\diag}{\operatorname{diag}}
+\newcommand{\spec}{\operatorname{spec}}
+\newcommand{\Span}{\operatorname{span}}
+\newcommand{\norm}[1]{\left\lVert #1\right\rVert}
+\newcommand{\inner}[2]{\left\langle #1,#2\right\rangle}
+\newcommand{\dd}{\mathrm d}
+\newcommand{\Areg}{\mathscr A}
+\newcommand{\Jreg}{\mathfrak D}
+\newcommand{\Sigreg}{\mathfrak S}
+\newcommand{\Qreg}{\mathscr Q}
+\newcommand{\Id}{\mathrm I}
+
+\begin{document}
+\input{sections/01_part.tex}
+\input{sections/02_part.tex}
+\input{sections/03_part.tex}
+\input{sections/04_part.tex}
+\input{sections/05_part.tex}
+\input{sections/06_part.tex}
+\input{sections/07_part.tex}
+\input{sections/08_part.tex}
+\input{sections/09_part.tex}
+\input{sections/10_part.tex}
+\input{sections/11_part.tex}
+\input{sections/12_part.tex}
+\input{sections/13_part.tex}
+\input{sections/14_part.tex}
+\input{sections/15_part.tex}
+\input{sections/16_part.tex}
+\input{sections/17_part.tex}
+\input{sections/18_part.tex}
+\input{sections/19_part.tex}
+\end{document}

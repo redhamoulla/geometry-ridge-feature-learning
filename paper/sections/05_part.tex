@@ -1,0 +1,118 @@
+\subsection{Reparameterization, whitening isometry, and orbit}
+Under a local coordinate change $\theta'=\varphi(\theta)$ with invertible differential $A=\dd\varphi_\theta$, the objects transform as
+\begin{equation}
+G_S'=A^{-\top}G_SA^{-1},
+\qquad
+\Gamma_i'=A^{-\top}\Gamma_iA^{-1},
+\qquad
+\alpha_i'=A^{-\top}\alpha_i.
+\label{eq:covariance-laws}
+\end{equation}
+Consequently, $R$ and $C$ transform by similarity, whereas $v$ and $d$ transform as tangent vectors.
+
+Choose an isometry
+\[
+L:(V,G_S)\longrightarrow(\R^p,I).
+\]
+In this $G_S$-orthonormal frame, the datum becomes
+\begin{equation}
+B=L^{-\top}\Gamma_iL^{-1}\succeq0,
+\qquad
+b=L^{-\top}\alpha_i.
+\label{eq:whitened-pair}
+\end{equation}
+In Euclidean coordinates with $L=G_S^{1/2}$, this reads $B=G_S^{-1/2}\Gamma_iG_S^{-1/2}$ and $b=G_S^{-1/2}\alpha_i$. Two whitening isometries differ by some $Q\in O(p)$ and transform
+\begin{equation}
+(B,b)\longmapsto(QBQ^\top,Qb).
+\end{equation}
+The intrinsic object is therefore the orthogonal orbit $[B,b]$.
+
+\begin{definition}[Orbit signature]
+Let $\lambda$ be a distinct eigenvalue of $B$, with multiplicity $m_\lambda$, and let $\Pi_\lambda$ be the orthogonal projector onto its eigenspace. We define
+\begin{equation}
+\boxed{
+\Sigreg(B,b)
+=
+\bigl\{(\lambda,m_\lambda,\beta_\lambda):
+\beta_\lambda=\norm{\Pi_\lambda b}^2\bigr\}_{\lambda\in\spec(B)}.
+}
+\label{eq:orbital-signature}
+\end{equation}
+\end{definition}
+
+The following classification is a finite-dimensional consequence of the spectral theory of a self-adjoint operator and the action of its orthogonal stabilizer; it is not claimed as a new abstract theorem \citep{halmos1951,weyl1946,sibirskii1967,sibirskii1968,khadzhiev1967}. We state it explicitly to characterize the intrinsic information carried by the observation.
+
+\begin{theorem}[Complete orbit classification]
+Two whitened pairs $(B,b)$ and $(B',b')$ are related by an orthogonal transformation
+\[
+B'=QBQ^\top,
+\qquad
+b'=Qb
+\]
+if and only if their orbit signatures \eqref{eq:orbital-signature} coincide.
+\label{thm:orbit-classification}
+\end{theorem}
+
+\begin{proof}
+Necessity is immediate. Conversely, for each eigenvalue $\lambda$, the eigenspaces $E_\lambda$ and $E'_\lambda$ have the same dimension, and the vectors $\Pi_\lambda b$ and $\Pi'_\lambda b'$ have the same norm. The group $O(E_\lambda)$ acts transitively on each sphere, so there is an isometry $Q_\lambda:E_\lambda\to E'_\lambda$ mapping one vector to the other. The orthogonal direct sum $Q=\bigoplus_\lambda Q_\lambda$ satisfies both identities.
+\end{proof}
+
+\begin{proposition}[Principal quotient and global coordinates]
+Let
+\[
+\mathcal P=
+\left\{(B,b)\in\operatorname{Sym}_{++}(p)\times\R^p:
+\lambda_1(B)<\cdots<\lambda_p(B),\ 
+\langle b,e_j(B)\rangle\neq0\ \forall j
+\right\}.
+\]
+The action of $O(p)$ on $\mathcal P$ is free. The map
+\[
+\Phi:\mathcal P/O(p)\longrightarrow
+\Lambda_p\times(\R_{>0})^p,
+\qquad
+[B,b]\longmapsto
+(\lambda_1,\ldots,\lambda_p,\beta_1,\ldots,\beta_p),
+\]
+where
+\[
+\Lambda_p=\{(\lambda_1,\ldots,\lambda_p):0<\lambda_1<\cdots<\lambda_p\},
+\qquad
+\beta_j=\langle b,e_j(B)\rangle^2,
+\]
+is a global diffeomorphism. The principal quotient is therefore a manifold of dimension $2p$.
+\label{prop:principal-quotient}
+\end{proposition}
+\begin{proof}
+If $Q\in O(p)$ stabilizes $(B,b)$, then $QB=BQ$. Since the spectrum of $B$ is simple, in the ordered eigenbasis one has $Qe_j=\varepsilon_je_j$ with $\varepsilon_j\in\{-1,1\}$. The equality $Qb=b$ and the non-vanishing of every component of $b$ force $\varepsilon_j=1$ for all $j$; hence the stabilizer is trivial.
+
+The ordered signature is constant on orbits. Conversely, every orbit has a representative of the form
+\[
+B=\diag(\lambda_1,\ldots,\lambda_p),
+\qquad
+b=(\sqrt{\beta_1},\ldots,\sqrt{\beta_p})^\top,
+\]
+obtained by ordering the eigenvectors and choosing their signs so that the components of $b$ are positive. This representative is unique. The explicit inverse map
+\[
+(\lambda,\beta)\longmapsto
+\left[\diag(\lambda_1,\ldots,\lambda_p),
+(\sqrt{\beta_1},\ldots,\sqrt{\beta_p})^\top\right]
+\]
+is smooth, as is $\Phi$ on the simple-spectrum stratum. This proves the stated diffeomorphism.
+\end{proof}
+
+\begin{corollary}[Minimum dimension of a regular local representation]
+Let $U$ be an open subset of the principal quotient and let $f:U\to\R^k$ be a smooth locally injective map whose differential is injective at every point, that is, a locally injective immersion. Then $k\ge 2p$.
+\end{corollary}
+\begin{proof}
+By Proposition~\ref{prop:principal-quotient}, $U$ is a manifold of dimension $2p$. Injectivity of $\dd f$ implies $\rank(\dd f)=2p$, hence $k\ge2p$.
+\end{proof}
+
+\begin{remark}
+The principal quotient is a useful reference stratum, but it is rarely the application-relevant stratum of an isolated observation:
+\[
+\rank\Gamma_i\leq\dim Y_i.
+\]
+A scalar observation therefore has an increment of rank at most one, regardless of the number of parameters. Low-rank strata are treated below; repeated positive eigenvalues and zero spectral energies form lower-dimensional boundaries, still classified by the complete signature of Theorem~\ref{thm:orbit-classification}.
+\end{remark}
+

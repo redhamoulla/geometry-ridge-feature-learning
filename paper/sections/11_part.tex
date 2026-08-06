@@ -1,0 +1,110 @@
+\subsection{Functional mobility in Friedman~\#1 and frozen controls}
+\label{subsec:functional-drift}
+For $300$ epochs on ten independent Friedman~\#1 datasets, we train three regimes sharing the same probes: a full ReLU network $10\to8\to1$, the same frozen random feature extractor with only a linear head trained, and the fully first-order linearized model around initialization. The primary diagnostic is the functional operator $K_t^{(0)}$ and the alignment and drift quantities from Equation~\eqref{eq:alignment-drift}.
+
+\begin{table}[H]
+\centering
+\caption{Functional mobility and performance between initialization and epoch 300.}
+\label{tab:functional-drift}
+\small
+\begin{tabular}{@{}lccc@{}}
+\toprule
+Regime & Alignment of $K^{(0)}$ & Normalized drift & Test MSE \\
+\midrule
+Full network & $0.815\pm0.036$ & $0.606\pm0.058$ & $0.1020\pm0.0090$ \\
+Frozen feature extractor & $1.000$ & $0.000$ & $0.6502\pm0.1243$ \\
+Linearized model & $1.000$ & $0.000$ & $0.2917\pm0.0224$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[htbp]
+\centering\fbox{\parbox{0.88\linewidth}{\centering Figure 5 is available in the compiled Version 7 manuscript.}}
+\caption{Experimental figure 5.}\label{fig:functional-drift}
+\end{figure}
+
+The three rows do not live in exactly the same tangent space. For the \emph{frozen feature extractor}, the declared parametric subspace is that of the trainable linear head alone; in this reduced space, its head Jacobian, and therefore $K_t^{(0)}$, is constant by construction. If the frozen extractor parameters were formally retained in the full tangent space, the total Jacobian could depend on the head weights. The \emph{linearized model} control, by contrast, uses the same number of parameter coordinates as the full network but fixes the Jacobian at initialization: it is the lazy control in the same ambient space.
+
+The decrease in alignment of the full network, absent from these explicitly frozen controls, establishes only that its functional operator is not constant in this protocol. It does not prove that this mobility alone causes the MSE gap between regimes. A second computation, restricted to the full network, gives hidden-representation Gram alignment $0.574\pm0.056$, initial--final rank correlation of contractions $0.834\pm0.023$, and median relative drift of raw Jacobians $2.509\pm0.441$. These are auxiliary diagnostics: the hidden Gram depends on the chosen representation and raw Jacobian drift depends on parameterization. The operator-level control $K_t^{(0)}$ carries the main conclusion.
+
+At the final epoch, register medians separate the controlled contaminations:
+\begin{table}[H]
+\centering
+\caption{Final qualification of the probes in Friedman~\#1.}
+\label{tab:nonlinear-groups}
+\small
+\begin{tabular}{@{}lcc@{}}
+\toprule
+Group & Median contraction & Median natural effort \\
+\midrule
+Ordinary clean & $0.166$ & $0.386$ \\
+Rare clean & $0.221$ & $0.541$ \\
+Label outlier & $0.159$ & $7.636$ \\
+Covariate outlier & $0.751$ & $15.844$ \\
+Mixed contamination & $0.746$ & $28.638$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+Label corruption leaves contraction nearly ordinary and increases effort. Covariate corruption strongly increases contraction; in this network, it also increases effort because the prediction is displaced. The register therefore does not promise perfect causal separation, but a decomposition of the channels through which the point acts.
+
+\subsection{The history of an observation is not its final state}
+In a stagewise experiment, $400$ identically distributed observations are randomly assigned to an early- or late-exposure group. The network is trained successively on the first group, on the second, and then on the union. Eight independent datasets are used.
+
+\begin{table}[H]
+\centering
+\caption{AUC for recovering exposure order after a common final phase.}
+\label{tab:stagewise}
+\small
+\begin{tabular}{@{}lcc@{}}
+\toprule
+Representation & Mean AUC & Standard deviation \\
+\midrule
+Final predictive attribution & $0.491$ & $0.035$ \\
+Final pair $(\rho,\zeta)$ & $0.494$ & $0.026$ \\
+Predictive-attribution trajectory & $0.639$ & $0.020$ \\
+Residual trajectory & $0.726$ & $0.025$ \\
+Register trajectory & $0.727$ & $0.023$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[htbp]
+\centering\fbox{\parbox{0.88\linewidth}{\centering Figure 6 is available in the compiled Version 7 manuscript.}}
+\caption{Experimental figure 6.}\label{fig:stagewise}
+\end{figure}
+
+The result supports the need for temporal accounting, but not a general superiority of the dynamic register: the residual trajectory reaches almost the same AUC. Here the register provides a decomposition of the phenomenon, not an established discriminative gain.
+
+\subsection{California Housing: controlled local qualification}
+\label{subsec:california}
+California Housing is used with linear Ridge regression and label corruptions injected into $5\,\%$ of the training set. Rare but clean points and controlled duplications are added to test false positives. At fixed $\lambda$, the global score is the studentized deleted residual obtained through the hat-matrix identity, without retraining $n$ models. A point is excluded from its own neighborhood. Neighborhood, local-shrinkage, and $\lambda$ parameters are selected on a clean validation set; the final test remains hidden. This is algebraic leave-one-out with self-excluded neighborhoods, not $K$-fold cross-fitting.
+
+\begin{table}[H]
+\centering
+\caption{Detection of corrupted labels: global score, Euclidean neighborhood, and Ridge-geometric neighborhood.}
+\label{tab:california}
+\scriptsize
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+Amplitude & Score & AUC & Precision at top-$k$ & Rare clean points at top-$k$ \\
+\midrule
+$0.75\sigma$ & global & $0.810$ & $0.173$ & $9.82\,\%$ \\
+                & local Euclidean & $0.858$ & $0.319$ & $4.60\,\%$ \\
+                & local geometric & $0.864$ & $0.350$ & $4.43\,\%$ \\
+$1.5\sigma$  & global & $0.950$ & $0.480$ & $5.73\,\%$ \\
+                & local Euclidean & $0.959$ & $0.618$ & $2.61\,\%$ \\
+                & local geometric & $0.959$ & $0.636$ & $2.36\,\%$ \\
+$3\sigma$      & global & $0.997$ & $0.914$ & $1.61\,\%$ \\
+                & local Euclidean & $0.996$ & $0.868$ & $1.02\,\%$ \\
+                & local geometric & $0.995$ & $0.870$ & $0.98\,\%$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{figure}[htbp]
+\centering\fbox{\parbox{0.88\linewidth}{\centering Figure 7 is available in the compiled Version 7 manuscript.}}
+\caption{Experimental figure 7.}\label{fig:california}
+\end{figure}
+
+The local correction substantially improves the top of the ranking for weak and moderate corruptions while protecting rare clean points. Most of the gain comes from local contextualization; at $0.75\sigma$, the Ridge geometry adds about $0.007$ AUC and $0.031$ top-$k$ precision over the Euclidean neighborhood. For gross corruptions, the global residual is already nearly perfect. Finally, directly using these scores as loss weights worsens test MSE: an audit passport is not automatically an optimal regression coefficient.
+

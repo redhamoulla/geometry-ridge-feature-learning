@@ -1,0 +1,15 @@
+\section{Limitations and Open Questions}
+% -----------------------------------------------------------------------------
+\begin{enumerate}
+  \item \textbf{Locality.} The orbit theorem concerns a local quadratic model and a positive geometry. An indefinite exact Hessian would require classification under a different group and does not directly inherit the same contraction interpretations. The relative quadratic datum also retains neither the loss constant nor output-error components lying in $\Ker J_i^*$. It now explicitly distinguishes this parametric kernel from the output-curvature kernel $\Ker(W_i h_i^\sharp)$.
+  \item \textbf{Degeneracy.} We assume $G_S\succ0$. Generic low-rank strata of $B$ are classified here, but repeated positive eigenvalues, zero spectral energies, rank changes along a trajectory, and the case in which the collective geometry $G_S$ itself is singular still require a stratified theory or passage to an identifiable quotient.
+  \item \textbf{Path of minima.} Nonlinear insertion assumes a regular branch of local minima. Bifurcations, basin changes, or singular Hessians may interrupt the path.
+  \item \textbf{Background metric.} The functional operator $K_t^{(0)}$ depends on the declared choice of $g_0$. Reparameterization invariance does not remove this substantive choice.
+  \item \textbf{Multiple configurations.} Individual signatures do not contain the mutual angles among several prospective observations; joint selection or auditing requires simultaneous invariants in a common frame.
+  \item \textbf{Qualification versus weighting.} An informative, discordant, or influential point is not necessarily bad. The experiments show that good qualification does not automatically yield an optimal loss weight.
+  \item \textbf{Semantic validity.} A constraint such as ``strictly positive area'' does not follow from differential geometry alone. It requires a domain, a conditional model, or subject-matter knowledge.
+  \item \textbf{Experimental comparisons.} Controlled corruptions isolate mechanisms but do not replace natural annotations. The added Schweppe-type baseline shares the same leverage proxy as BGR, although its thresholds are calibrated separately under the same nominal constraint; a complete comparison should still include Cook, robust leverage, influence functions, TRAK, semivalues, high-breakdown-initialized Krasker--Welsch, and cellwise methods across several independent tasks.
+  \item \textbf{Scalability.} Full spectra and metric inverses are expensive in large networks. Low-rank approximations, matrix--vector products, and randomized sketches remain to be developed.
+\end{enumerate}
+
+% -----------------------------------------------------------------------------

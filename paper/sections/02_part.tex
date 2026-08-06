@@ -1,0 +1,31 @@
+\section{Introduction}
+% -----------------------------------------------------------------------------
+Data valuation and diagnostic methods often ask an apparently simple question: \emph{how much is an observation worth?} Leverage, studentized residuals, Cook's distance, influence functions, information gain, leave-one-out, and Data Shapley provide different answers because they do not measure the same effect. An observation may reveal a direction that was previously poorly determined, strongly contradict the model, move the parameters without changing a given target, or contribute to a utility only in certain contexts. Reducing these effects to a single number is useful for ranking points, but it destroys part of their structure.
+
+The starting point of this paper is the contraction--displacement law already visible in Ridge. A scalar observation $y=h^\top\theta+\varepsilon$ adds the positive tensor $hh^\top/r$ to the precision, contracts the covariance along the dual direction $Ph$, and its innovation then moves the estimator along that same direction. In the nonlinear setting, $h^\top$ is replaced by the Jacobian $J_i(\theta)$; the directions of observability then depend on the current point and may evolve with the representations.
+
+The first objective is to identify the object upstream of scalar diagnostics. To a context $S$ and an observation $i$, we associate the relative quadratic datum
+\[
+\Jreg_{i\mid S}=(G_S,\Gamma_i,\alpha_i),
+\]
+where the separation between the context geometry $G_S$ and the point-specific increment $\Gamma_i$ is retained. After choosing a $G_S$-orthonormal frame, the intrinsic information is the orthogonal orbit of $(B,b)$. Its complete signature contains the eigenvalues of $B$, their multiplicities, and the energy of $b$ in each eigenspace. This classification is a finite-dimensional specialization of classical results from spectral theory and orthogonal invariants; the contribution of the paper lies in applying it to the conditional qualification of an observation.
+
+The second objective is to state precisely what is meant by \emph{factorization}. The result does not concern the total quadratic function alone: it concerns the \emph{decorated} datum $(G_S,\Gamma_i,\alpha_i)$, whose context--observation decomposition is part of the object. In a fixed additive geometry, classical diagnostics are non-injective maps of this register: traces, log-determinants, norms, pairings with a target, or averages over contexts. In a fully retrained nonlinear model, additivity is replaced by a reweighting path.
+
+The third objective is practical: to separate qualification from decision. The register may indicate that a point is geometrically novel, locally discordant, highly influential, or structurally invalid. It does not follow that a single loss weight is optimal. Contraction and innovation budgets are presented as one admission policy within the family of GM-estimators, not as a new universal estimator.
+
+\begin{statementbox}{Contributions of version 7}
+\begin{enumerate}
+  \item A relative quadratic datum $(G_S,\Gamma_i,\alpha_i)$ whose scope is explicitly limited to the parametric action of the local Gauss--Newton model, up to an additive constant.
+  \item A complete orbit classification of the whitened pair $(B,b)$, a global diffeomorphism for the principal quotient, and an explicit classification of generic rank-$r$ strata, of dimensions $2r+1$ or $2r$ under the compatibility condition $b\in\Img B$.
+  \item An effort--curvature compatibility lemma showing that $W_i\succ0$ implies $\alpha_i\in\Img\Gamma_i$, which naturally places scalar quadratic observations on the compatible rank-one stratum.
+  \item A separation between invisibility in loss curvature, $\Ker(W_ih_i^\sharp)$, and parametric invisibility, $\Ker J_i^*$, together with the observation that these marginal diagnostics may overlap.
+  \item An exact factorization of classical diagnostics, a simultaneous collision of five scalarizations constructed in rank three, and extensions to multiple targets and nonlinear trajectories.
+  \item Tightened robustness controls: an identifier-level internal SeLoger holdout, a Huber baseline with a non-geometric scale, sensitivity of $\kappa_X$ to listing mass, and a public replication on Concrete Compressive Strength.
+  \item Broader positioning relative to the Memory--Perturbation Equation, the Versatile Influence Function, and singular Riemannian geometries for neural networks.
+\end{enumerate}
+\end{statementbox}
+
+The contribution is not the invention of leverage, influence, Fisher geometry, Shapley values, spectral classification, or robust estimators. It is the structured application of these invariants to a non-scalar conditional datum for each observation, followed by a precise identification of what is lost under scalarization.
+
+% -----------------------------------------------------------------------------

@@ -1,0 +1,126 @@
+\subsection{SeLoger: robustness on raw data}
+\label{subsec:seloger}
+The SeLoger file contains $8{,}899$ raw rows and $3{,}815$ listing identifiers. No structural cleaning, deduplication, or removal of atypical prices is applied to the training set. The target is log price; internal splits are performed by identifier. Synthetic contaminations are injected into non-duplicated listings so that the main result is not a deduplication effect.
+
+\paragraph{Internal holdout and representative rule.}
+Before the calibration specific to this version, identifiers are split once and for all into two globally disjoint sets:
+\[
+\mathcal D_{\rm dev}\cap\mathcal D_{\rm eval}=\varnothing,
+\qquad
+|\mathcal D_{\rm dev}|=763,
+\qquad
+|\mathcal D_{\rm eval}|=3{,}052.
+\]
+All robust thresholds are selected only within $\mathcal D_{\rm dev}$; the ten final splits are performed exclusively within $\mathcal D_{\rm eval}$. This pool is an \emph{internal holdout newly isolated for versions 6--7}, not a historically blind external test: earlier exploratory versions had already used the same corpus. SHA--256 hashes of both identifier lists are included in the archive.
+
+The training set retains every row. Validation and test use a deterministic representative for each listing: the median for numerical columns and the first modal value under lexicographic ordering for non-numerical columns. Among the $64$ repeated groups, $21$ are not perfectly identical, amounting to $0.55\,\%$ of the listings; only the columns \texttt{number} and \texttt{position} vary within these groups. This aggregation replaces the former first-row rule and removes dependence on file order.
+
+\paragraph{Estimators actually tested.}
+In the main stress test, masses and the semantic gate are deliberately disabled:
+\[
+\boxed{\pi_i=\chi_i=1.}
+\]
+The experiment isolates only the budgets $a_i^X$ and $a_i^Y$. The implementation adds a constant coordinate to the design and uses \texttt{fit\_intercept=False}; the intercept is therefore penalized. BGR and the Schweppe-type baseline call the same fitting functions during calibration and evaluation, with at most twelve IRLS iterations and relative tolerance $2\times10^{-5}$.
+
+For each family, the selection rule is
+\[
+\frac13\sum_{s=1}^{3}
+\frac{\mathrm{RMSE}_{s,\rm robust}}
+     {\mathrm{RMSE}_{s,\rm Ridge}}
+\le 1.005,
+\]
+after which the mean robust RMSE among feasible candidates is minimized. It selects $(q_X,\kappa_Y)=(0.90,2.0)$ for both BGR and Schweppe-type. Their mean nominal development ratios are respectively $0.98747$ and $0.98716$, with maximum ratios $1.00230$ and $1.00110$. This selection is conditional on the nominal internal holdout, not a universal non-inferiority guarantee.
+
+The baseline called \emph{Huber with geometric scale} below does not use geometric weights in its final regression, but its residual scale is estimated after a preliminary fit weighted by $a_i^X$. A separate ablation, reported below, adds a pure Huber estimator whose scale comes from ordinary Ridge.
+
+Two evaluation domains are reported:
+\[
+\mathrm{RMSE}_{\rm all}
+\quad\text{over all distinct listings,}
+\]
+and
+\[
+\mathrm{RMSE}_{\rm plausible}
+\quad\text{after excluding, at test time only, }
+\text{area}\le0,\ \text{rooms}>20,\ \text{bedrooms}>10.
+\]
+The second domain isolates learning robustness without making the primary metric depend on manifestly out-of-domain covariates; the first preserves transparency about this convention.
+
+\begin{table}[H]
+\centering
+\caption{Nominal performance on the internal SeLoger holdout. Mean $\pm$ standard deviation over ten overlapping splits, per distinct listing.}
+\label{tab:seloger-nominal}
+\small
+\begin{tabular}{@{}lcc@{}}
+\toprule
+Method & $\mathrm{RMSE}_{\rm all}$ & $\mathrm{RMSE}_{\rm plausible}$ \\
+\midrule
+Ridge & $0.25838\pm0.01407$ & $0.25816\pm0.01412$ \\
+Huber (geometric scale) & $0.25960\pm0.01446$ & $0.25935\pm0.01448$ \\
+Geometry only & $0.25810\pm0.01447$ & $0.25807\pm0.01449$ \\
+Schweppe-type & $0.25964\pm0.01467$ & $0.25945\pm0.01470$ \\
+BGR & $0.25944\pm0.01481$ & $0.25938\pm0.01483$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The mean nominal cost of BGR relative to Ridge is $0.001220$ in plausible RMSE, or $0.47\,\%$. The ten splitwise differences give the descriptive interval
+\[
+[-0.00031,\ 0.00275]
+\]
+around the mean; BGR is better on five splits and worse on five. No conventional $p$-value is reported because training and test sets overlap across repetitions.
+
+\begin{table}[H]
+\centering
+\caption{Increase in plausible/all-listing RMSE relative to each method's clean nominal state, under $5\,\%$ contamination.}
+\label{tab:seloger-ablation}
+\scriptsize
+\setlength{\tabcolsep}{4.5pt}
+\begin{tabular}{@{}lccccc@{}}
+\toprule
+Scenario & Ridge & Geom. Huber & Geometry & Schweppe-type & BGR \\
+\midrule
+Label, amplitude $4$
+& $0.05745/0.05914$
+& $0.00115/0.00132$
+& $0.05881/0.06167$
+& $\mathbf{0.00113}/0.00132$
+& $0.00114/0.00138$ \\
+Covariates, amplitude $50$
+& $0.14523/0.14495$
+& $0.11776/0.11746$
+& $0.01463/0.02033$
+& $0.00126/0.00167$
+& $\mathbf{-0.00006/-0.00001}$ \\
+Mixed, amplitudes $50$ and $4$
+& $0.18145/0.18143$
+& $0.07702/0.07725$
+& $0.01506/0.02000$
+& $0.00313/0.00407$
+& $\mathbf{0.00010/0.00018}$ \\
+Diffuse Gaussian noise, $\sigma=0.4$
+& $\mathbf{0.02416}/0.02428$
+& $0.02730/0.02712$
+& $0.02410/0.02438$
+& $0.02737/0.02719$
+& $0.02727/0.02732$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Under vertical outliers, the three estimators with bounded residual score achieve similar protection. Under high leverage, geometric clipping sharply reduces degradation, the Schweppe-type estimator lowers it to $0.00126$, and BGR's degradation is numerically indistinguishable from zero. Under mixed contamination, the plausible degradation of BGR is $0.00010$, compared with $0.00313$ for Schweppe-type, $0.01506$ for the geometric gate alone, and $0.18145$ for Ridge. Under diffuse Gaussian noise, Ridge and the geometric gate alone remain better in this protocol.
+
+The cellwise scenario reproducing $\mathrm{area}=0$, $53$ rooms, or $22$ bedrooms yields plausible degradations of $0.00222$ for Ridge, $0.00031$ for Huber, and $0.00090$ for BGR. These values do not turn norm clipping into a semantic detector: an impossible covariate of moderate norm still requires a validity gate $\chi_i$ or a cellwise robust method.
+
+\begin{figure}[htbp]
+\centering\fbox{\parbox{0.88\linewidth}{\centering Figure 8 is available in the compiled Version 7 manuscript.}}
+\caption{Experimental figure 8.}\label{fig:seloger-bgr}
+\end{figure}
+
+\paragraph{Ablations requested by the review.}
+Across five splits of the evaluation pool, a pure Huber estimator, calibrated separately with a scale obtained from ordinary Ridge, selects $\kappa_Y=1.5$. Its degradation under vertical contamination is $0.00075$, compared with $0.00102$ for the geometrically stabilized-scale baseline. Their nominal RMSEs are respectively $0.26607$ and $0.26507$. The ablation conclusion therefore does not depend on geometric pre-fitting: a bounded residual score is sufficient for vertical contamination, but the two scale choices are not identical.
+
+The geometric threshold at quantile $q_X=0.90$ is on average $3.6765$ when computed over raw rows, compared with $3.2735$ using one median representative per identifier or quantile weights $1/m_g$. Despite this difference of about $12\,\%$, BGR degradations remain near zero under the gross stress test: for leverage, $-0.00015$, $-0.00011$, and $-0.00011$; for mixed contamination, $-0.00006$, $-0.00001$, and $-0.00001$. This five-split sensitivity analysis shows that calibration of $\kappa_X$ does depend on the notion of mass, while the qualitative conclusion of the extreme stress test remains stable.
+
+The ablation supports the contraction--displacement interpretation: the innovation gate protects against label outliers, the geometric gate protects against high-leverage covariates, and their combination is necessary for mixed contamination. BGR remains a regularized Mallows-type GM-estimator; the experiment validates a mechanism in this protocol, not algorithmic novelty or general dominance over the best robust estimators.
+

@@ -1,0 +1,51 @@
+\subsection{Concrete Compressive Strength: public stress test}
+To make the mechanism verifiable without the private SeLoger file, we reproduce the same type of stress test on Concrete Compressive Strength, a UCI dataset with $1{,}030$ observations, eight numerical variables, and compressive strength in MPa as target \citep{yeh1998concrete}. Recipes with exactly identical covariates are grouped before any split. A global development pool containing $25\,\%$ of the groups is used for calibration over five splits; the ten evaluation splits are performed on the remaining groups. Here, the residual scales of all methods come from ordinary Ridge.
+
+The development constraint is stricter than for SeLoger: mean nominal ratio below $1.005$ and maximum ratio below $1.01$. It selects $q_X=0.99$ and $\kappa_Y=4$ for BGR. On the evaluation pool, this calibration does not transfer perfectly: nominal BGR RMSE is $0.63432$, compared with $0.62183$ for Ridge, a cost of about $2.0\,\%$. This cost is retained because it prevents presenting the robust result without its nominal trade-off.
+
+\begin{table}[H]
+\centering
+\caption{Public Concrete experiment: nominal RMSE and RMSE increase under $5\,\%$ contamination. Standardized target; ten overlapping splits of the evaluation pool.}
+\label{tab:concrete-public}
+\scriptsize
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Method & Nominal & Labels $A=4$ & Leverage $A=50$ & Mixed \\
+\midrule
+Ridge & $0.62183$ & $0.01086$ & $0.34651$ & $0.34750$ \\
+Pure Huber & $0.63340$ & $\mathbf{0.00146}$ & $0.31401$ & $0.26987$ \\
+Geometry only & $0.63199$ & $0.01195$ & $0.11931$ & $0.11557$ \\
+Schweppe-type & $0.66268$ & $-0.00055$ & $0.03649$ & $0.03478$ \\
+BGR & $0.63432$ & $0.00414$ & $\mathbf{0.02541}$ & $\mathbf{0.02416}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The public dataset recovers the separation of mechanisms: Huber mainly reduces vertical outliers, whereas methods with a geometric gate resist leverage. BGR achieves the smallest degradation under leverage and mixed contamination among the retained configurations, but it dominates neither Huber on labels nor Ridge nominally. Differences under diffuse Gaussian noise are small and vary in sign; they are not used as an argument of superiority.
+
+\begin{figure}[htbp]
+\centering\fbox{\parbox{0.88\linewidth}{\centering Figure 9 is available in the compiled Version 7 manuscript.}}
+\caption{Experimental figure 9.}\label{fig:concrete-public}
+\end{figure}
+
+This public replication strengthens validation of the mechanism while also showing its limitation: satisfying a nominal constraint on development does not guarantee the same cost on another pool. It therefore supports a conditional robustness interpretation, not universal dominance of BGR.
+
+\subsection{What the experiments do and do not establish}
+The experimental results support five conclusions:
+\begin{enumerate}
+  \item the static factorizations are exact when their assumptions hold;
+  \item non-scalar structure becomes possible as soon as rank exceeds one, and a simultaneous collision of five scalarizations is explicitly established in rank three;
+  \item the functional register genuinely evolves in the nonlinear protocol;
+  \item the contraction--innovation decomposition provides a coherent architecture for auditing and for distinct robust budgets;
+  \item the SeLoger and Concrete controls reproduce this separation under gross contamination while revealing nominal costs, calibration effects, and the absence of dominance under diffuse noise.
+\end{enumerate}
+They do not establish:
+\begin{itemize}
+  \item general superiority over Data Shapley, TRAK, or influence functions for every utility;
+  \item novelty of the leverage--residual pair in scalar regression;
+  \item a universal predictive gain of the BGR prototype or cost-free calibration transfer;
+  \item automatic detection of semantic covariate errors;
+  \item a global guarantee for nonconvex networks.
+\end{itemize}
+
+% -----------------------------------------------------------------------------
