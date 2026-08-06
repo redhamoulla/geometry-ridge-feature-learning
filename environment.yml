@@ -1,0 +1,12 @@
+name: geometric-register-v7
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - numpy>=1.26
+  - pandas>=2.1
+  - scipy>=1.11
+  - scikit-learn>=1.4
+  - matplotlib>=3.8
+  - pytorch>=2.2
+  - pytest>=8
