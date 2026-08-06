@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+.env
+.DS_Store
+*.egg-info/
+build/
+dist/
+results/generated/
+experiments/**/generated/
+selogerdata*.csv
