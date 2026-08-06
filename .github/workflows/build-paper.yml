@@ -1,22 +1,41 @@
 name: build-paper
+
 on:
+  workflow_dispatch:
   push:
     branches: [main]
-    paths: ['paper/**/*.tex','paper/**/*.bib']
+    paths:
+      - 'paper/**/*.tex'
+      - 'paper/**/*.bib'
+      - '.github/workflows/build-paper.yml'
+
 permissions:
   contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: xu-cheng/latex-action@v3
         with:
           root_file: main.tex
           working_directory: paper
-      - run: |
+      - name: Commit compiled PDF
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f paper/main.pdf
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add paper/main.pdf
-          git diff --cached --quiet || git commit -m 'build: compile paper PDF'
-          git push
+          if git diff --cached --quiet; then
+            echo 'Compiled PDF is unchanged.'
+            exit 0
+          fi
+          git commit -m 'build: compile paper PDF'
+          git fetch origin main
+          git rebase origin/main
+          git push origin HEAD:main
