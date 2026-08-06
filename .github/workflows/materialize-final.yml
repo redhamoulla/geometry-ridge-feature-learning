@@ -1,0 +1,177 @@
+name: materialize-final-repository
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  materialize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Locate and validate publication payloads
+        id: payload
+        shell: bash
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+
+          publish_files=(.publish/*.b64 .artifacts/*.b64)
+          if (( ${#publish_files[@]} == 0 )); then
+            echo 'run=false' >> "$GITHUB_OUTPUT"
+            echo 'No publication payload remains; repository is already materialized.'
+            exit 0
+          fi
+
+          decode_first_valid_tar() {
+            local destination=$1
+            shift
+            local pattern files
+            for pattern in "$@"; do
+              files=( $pattern )
+              (( ${#files[@]} > 0 )) || continue
+              if cat "${files[@]}" | base64 --decode > "$destination" 2>/dev/null \
+                 && tar -tzf "$destination" >/dev/null 2>&1; then
+                echo "Using repository payload: $pattern"
+                return 0
+              fi
+            done
+            return 1
+          }
+
+          decode_first_valid_zip() {
+            local destination=$1
+            shift
+            local pattern files
+            for pattern in "$@"; do
+              files=( $pattern )
+              (( ${#files[@]} > 0 )) || continue
+              if cat "${files[@]}" | base64 --decode > "$destination" 2>/dev/null \
+                 && unzip -tq "$destination" >/dev/null 2>&1; then
+                echo "Using source payload: $pattern"
+                return 0
+              fi
+            done
+            return 1
+          }
+
+          decode_first_valid_pdf() {
+            local destination=$1
+            shift
+            local pattern files
+            for pattern in "$@"; do
+              files=( $pattern )
+              (( ${#files[@]} > 0 )) || continue
+              if cat "${files[@]}" | base64 --decode > "$destination" 2>/dev/null \
+                 && head -c 5 "$destination" | grep -q '%PDF-'; then
+                echo "Using PDF payload: $pattern"
+                return 0
+              fi
+            done
+            return 1
+          }
+
+          decode_first_valid_tar /tmp/repository.tar.gz \
+            '.publish/repo-*.b64' \
+            '.publish/repository-files-*.b64' \
+            '.artifacts/repository-files-*.b64' \
+            '.artifacts/repo-*.b64'
+
+          repo_sha=$(sha256sum /tmp/repository.tar.gz | awk '{print $1}')
+          echo "Repository payload SHA-256: $repo_sha"
+
+          if decode_first_valid_zip /tmp/paper-sources.zip \
+               '.publish/sources-*.b64' \
+               '.publish/source-*.b64' \
+               '.publish/paper-sources-*.b64' \
+               '.artifacts/paper-sources-*.b64' \
+               '.artifacts/sources-*.b64' \
+               '.artifacts/source-*.b64'; then
+            echo 'has_sources=true' >> "$GITHUB_OUTPUT"
+            echo "Source archive SHA-256: $(sha256sum /tmp/paper-sources.zip | awk '{print $1}')"
+          else
+            echo 'has_sources=false' >> "$GITHUB_OUTPUT"
+          fi
+
+          if decode_first_valid_pdf /tmp/paper.pdf \
+               '.publish/paper-pdf-*.b64' \
+               '.publish/pdf-*.b64' \
+               '.artifacts/paper-pdf-*.b64' \
+               '.artifacts/pdf-*.b64'; then
+            echo 'has_pdf=true' >> "$GITHUB_OUTPUT"
+            echo "PDF SHA-256: $(sha256sum /tmp/paper.pdf | awk '{print $1}')"
+          else
+            echo 'has_pdf=false' >> "$GITHUB_OUTPUT"
+          fi
+
+          echo 'run=true' >> "$GITHUB_OUTPUT"
+
+      - name: Materialize structured repository
+        if: steps.payload.outputs.run == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          find . -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
+          tar -xzf /tmp/repository.tar.gz -C .
+          mkdir -p paper
+
+          if [[ '${{ steps.payload.outputs.has_sources }}' == 'true' ]]; then
+            cp /tmp/paper-sources.zip paper/conditional_geometric_register_of_observations_v7_en_sources.zip
+            rm -rf paper/src /tmp/paper-unpacked
+            mkdir -p /tmp/paper-unpacked
+            unzip -q /tmp/paper-sources.zip -d /tmp/paper-unpacked
+            source_root=$(find /tmp/paper-unpacked -type f -name main.tex -printf '%h\n' | head -n 1)
+            if [[ -n "$source_root" ]]; then
+              mkdir -p paper/src
+              cp -a "$source_root"/. paper/src/
+            fi
+          fi
+
+          if [[ '${{ steps.payload.outputs.has_pdf }}' == 'true' ]]; then
+            cp /tmp/paper.pdf paper/conditional_geometric_register_of_observations_v7_en.pdf
+          fi
+
+      - name: Compile paper when only sources are available
+        if: steps.payload.outputs.run == 'true' && steps.payload.outputs.has_pdf != 'true' && steps.payload.outputs.has_sources == 'true'
+        uses: xu-cheng/latex-action@v3
+        with:
+          root_file: main.tex
+          working_directory: paper/src
+
+      - name: Install compiled PDF
+        if: steps.payload.outputs.run == 'true' && steps.payload.outputs.has_pdf != 'true' && steps.payload.outputs.has_sources == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          cp paper/src/main.pdf paper/conditional_geometric_register_of_observations_v7_en.pdf
+
+      - name: Validate final repository
+        if: steps.payload.outputs.run == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f README.md
+          test -f paper/conditional_geometric_register_of_observations_v7_en.pdf
+          test -d experiments
+          test -f run_experiments.py
+          test -f experiment_manifest.json
+          ! find . -type f -iname 'selogerdata*.csv' | grep -q .
+          ! grep -RIl 'redhamoulla\.com' README.md docs paper/src 2>/dev/null | grep -q .
+          python -m compileall -q run_experiments.py experiments tests
+
+      - name: Commit final repository to main
+        if: steps.payload.outputs.run == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'build: publish paper and reproducible simulations'
+          git push origin HEAD:main
