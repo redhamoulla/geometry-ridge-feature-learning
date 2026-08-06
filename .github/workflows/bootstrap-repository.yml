@@ -16,17 +16,18 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Validate repository bundle
+      - name: Reconstruct and validate repository bundle
         shell: bash
         run: |
           set -euo pipefail
-          echo '3ac996114cd2a4c57f6d980699995fa7cf4664e3a9cb60ac156b313ff524031a  .publish/repository.tar.gz' | sha256sum -c -
+          cat .publish/bundle-*.b64 | base64 --decode > /tmp/finalrepo.tar.gz
+          echo 'f9bba107d319adbed3c222a5477cff1b29c24abb188c9995b07b4d84f2abd386  /tmp/finalrepo.tar.gz' | sha256sum -c -
       - name: Publish structured repository
         shell: bash
         run: |
           set -euo pipefail
           find . -mindepth 1 -maxdepth 1 ! -name '.git' ! -name '.publish' -exec rm -rf {} +
-          tar -xzf .publish/repository.tar.gz -C .
+          tar -xzf /tmp/finalrepo.tar.gz -C .
           rm -rf .publish
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
