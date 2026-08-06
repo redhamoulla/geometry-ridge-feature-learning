@@ -20,14 +20,14 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          cat .publish/bundle-*.b64 | base64 --decode > /tmp/repository.tar.gz
-          echo '9c130c9b00d3843b236909fcea2959b1b882d723ee8393db5199f872c3c1df42  /tmp/repository.tar.gz' | sha256sum -c -
+          cat .publish/bundle-*.b64 | base64 --decode > /tmp/finalrepo.tar.gz
+          echo '39236c06bbbc62c62ef8c294d48ab3e059119f8d5bcd0c050b2530e89cb2ded6  /tmp/finalrepo.tar.gz' | sha256sum -c -
       - name: Publish structured repository
         shell: bash
         run: |
           set -euo pipefail
           find . -mindepth 1 -maxdepth 1 ! -name '.git' ! -name '.publish' -exec rm -rf {} +
-          tar -xzf /tmp/repository.tar.gz -C .
+          tar -xzf /tmp/finalrepo.tar.gz -C .
           rm -rf .publish
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
