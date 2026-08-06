@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
     paths:
-      - '.publish/repository.tar.gz'
+      - '.github/workflows/bootstrap-repository.yml'
   workflow_dispatch:
 
 permissions:
@@ -22,24 +22,26 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Validate uploaded repository bundle
+      - name: Download and validate repository bundle
         shell: bash
         run: |
           set -euo pipefail
-          test -s .publish/repository.tar.gz
-          tar -tzf .publish/repository.tar.gz > /tmp/repository-files.txt
-          grep -Eq '(^|\./)README\.md$' /tmp/repository-files.txt
-          grep -Eq '(^|\./)paper/' /tmp/repository-files.txt
-          grep -Eq '(^|\./)experiments/' /tmp/repository-files.txt
+          curl --fail --location --retry 5 --retry-delay 2 \
+            'https://drive.google.com/uc?export=download&id=17f5pUj2J02dMFIL-R139wvYjY6gvX9sp' \
+            --output /tmp/repository.tar.xz
+          echo 'dc9e6dcf993a337abf7da3a613bfdd42fc5075522c335638d359da4c5acd944f  /tmp/repository.tar.xz' | sha256sum -c -
 
       - name: Publish structured repository on main
         shell: bash
         run: |
           set -euo pipefail
-          cp .publish/repository.tar.gz /tmp/repository.tar.gz
-          find . -mindepth 1 -maxdepth 1 ! -name '.git' ! -name '.publish' -exec rm -rf {} +
-          tar -xzf /tmp/repository.tar.gz -C .
-          rm -rf .publish
+          mkdir -p /tmp/existing-workflows
+          cp -a .github/workflows/. /tmp/existing-workflows/
+          find . -mindepth 1 -maxdepth 1 ! -name '.git' -exec rm -rf {} +
+          tar -xJf /tmp/repository.tar.xz -C .
+          rm -rf .github/workflows
+          mkdir -p .github/workflows
+          cp -a /tmp/existing-workflows/. .github/workflows/
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add -A
