@@ -1,0 +1,19 @@
+{
+  "paper": [
+    "paper/conditional_geometric_register_of_observations_v7_en.pdf"
+  ],
+  "quick": [
+    "experiments/factorization/test_nonscalar_orbit_collision.py",
+    "experiments/factorization/test_orbit_signature_complementarity.py"
+  ],
+  "public": [
+    "experiments/factorization/test_factorization_and_dynamic_strictness.py",
+    "experiments/nonlinear/test_nonlinear_dynamic_register.py",
+    "experiments/nonlinear/test_nonlinear_functional_drift.py",
+    "experiments/nonlinear/test_functional_drift_controls.py",
+    "experiments/nonlinear/test_stagewise_dynamic_register.py",
+    "experiments/robustness/test_public_bgr_concrete.py",
+    "experiments/data_quality/test_local_conditional_surprise_california.py"
+  ],
+  "private_data_redistributed": false
+}
