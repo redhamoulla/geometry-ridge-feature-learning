@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "conditional-geometric-register-experiments"
 version = "0.1.0"
-description = "Experiments for the conditional geometric register of observations"
+description = "Reproducible experiments for the conditional geometric register of observations"
 requires-python = ">=3.10"
 readme = "README.md"
 

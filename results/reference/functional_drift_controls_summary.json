@@ -1,0 +1,42 @@
+{
+  "config": {
+    "n_train": 500,
+    "n_test": 1000,
+    "n_probe": 140,
+    "d": 10,
+    "h": 8,
+    "epochs": 300,
+    "lr": 0.02,
+    "weight_decay": 0.0001,
+    "replicates": 10
+  },
+  "regimes": [
+    {
+      "regime": "extracteur gelé",
+      "alignment_mean": 1.0,
+      "alignment_std": 1.6958936828758672e-16,
+      "drift_mean": 0.0,
+      "drift_std": 0.0,
+      "test_mse_mean": 0.6501758737928287,
+      "test_mse_std": 0.12428905796212981
+    },
+    {
+      "regime": "modèle linéarisé",
+      "alignment_mean": 1.0000000000000002,
+      "alignment_std": 2.1893893302388653e-16,
+      "drift_mean": 0.0,
+      "drift_std": 0.0,
+      "test_mse_mean": 0.2917080021866281,
+      "test_mse_std": 0.022382592745151864
+    },
+    {
+      "regime": "réseau complet",
+      "alignment_mean": 0.8149070645318819,
+      "alignment_std": 0.03599337797955464,
+      "drift_mean": 0.6059187213600955,
+      "drift_std": 0.058198644901972754,
+      "test_mse_mean": 0.10196724092783178,
+      "test_mse_std": 0.009004545433272853
+    }
+  ]
+}

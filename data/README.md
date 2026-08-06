@@ -1,7 +1,24 @@
 # Data
 
-`data/public/Concrete_Data_Yeh.csv` is the public Concrete Compressive Strength table used by the robustness experiment.
+## Public data
 
-California Housing is downloaded through `sklearn.datasets.fetch_california_housing` when needed.
+`data/public/` contains the public tables used by the repository:
 
-The SeLoger table is private and is not redistributed. Private scripts expect a CSV supplied through `--seloger-csv` or `SELOGER_CSV`.
+- `california_housing_raw.csv`
+- `Concrete_Data_Yeh.csv`
+
+## Private SeLoger table
+
+The SeLoger source table is not redistributed. Private experiments expect a CSV path supplied through `--seloger-csv` or the `SELOGER_CSV` environment variable.
+
+Expected columns include:
+
+```text
+number, codeinsee, codepostal, cp, etage, idagence, idannonce, idtiers,
+idtypechauffage, idtypecommerce, idtypecuisine,
+idtypepublicationsourcecouplage, naturebien, nb_chambres, nb_photos,
+nb_pieces, position, prix, si_balcon, si_sdEau, si_sdbain, surface,
+typedebien, ville
+```
+
+Do not commit the private CSV, derived personal data, or credentials.

@@ -1,0 +1,277 @@
+{
+  "dataset": {
+    "rows_total_raw": 8899,
+    "unique_listings_total": 3815,
+    "evaluation_pool_rows": 6769,
+    "evaluation_pool_unique_listings": 3052,
+    "development_pool_unique_listings": 763,
+    "exact_duplicate_rows_beyond_first_total": 5063
+  },
+  "protocol": {
+    "evaluation_splits": [
+      1101,
+      1202,
+      1303,
+      1404,
+      1505,
+      1606,
+      1707,
+      1808,
+      1909,
+      2010
+    ],
+    "globally_disjoint_dev_eval_pools": {
+      "pool_seed": 20260803,
+      "dev_fraction": 0.2,
+      "total_unique_ids": 3815,
+      "development_unique_ids": 763,
+      "evaluation_unique_ids": 3052,
+      "intersection_size": 0,
+      "development_ids_sha256": "9ea79d15a76873adbe721103a3cd86b4c6c441ce86019e1ba12875ccb736e106",
+      "evaluation_ids_sha256": "794187731f2f90578c086ac5af20a827cf83b8b168a70ac40bc56863f2c0c55e"
+    },
+    "training": "all raw rows",
+    "evaluation": "one row per idannonce; plausible subset excludes only surface<=0, pieces>20, bedrooms>10",
+    "q_geometry": 0.9,
+    "kappa_y": 2.0,
+    "hyperparameter_source": "seloger_robust_hyperparameters.json",
+    "penalized_intercept": true,
+    "target": "log(price)"
+  },
+  "nominal": [
+    {
+      "method": "bgr",
+      "rmse_plausible_mean": 0.2593754249355852,
+      "rmse_plausible_std": 0.014830849629223538,
+      "median_relative_error_mean": 0.13190366122014416
+    },
+    {
+      "method": "geometry",
+      "rmse_plausible_mean": 0.25807023328847667,
+      "rmse_plausible_std": 0.014494693639564678,
+      "median_relative_error_mean": 0.13269916111754593
+    },
+    {
+      "method": "huber",
+      "rmse_plausible_mean": 0.25935235894510256,
+      "rmse_plausible_std": 0.014484177399518097,
+      "median_relative_error_mean": 0.133083383393448
+    },
+    {
+      "method": "ridge",
+      "rmse_plausible_mean": 0.25815585119795337,
+      "rmse_plausible_std": 0.014121643653168443,
+      "median_relative_error_mean": 0.13443125100519185
+    }
+  ],
+  "vertical_A4": {
+    "ridge": {
+      "rmse_plausible_mean": 0.3156046235694213,
+      "delta_rmse_mean": 0.05744877237146797,
+      "delta_rmse_ci95": 0.005158200762164674,
+      "prediction_drift_mean": 0.18156107221010037,
+      "p95_drift_mean": 0.33689315080217314,
+      "mean_corrupt_geom_weight": 1.0,
+      "mean_corrupt_resid_weight": 1.0,
+      "mean_corrupt_combined_weight": 1.0
+    },
+    "huber": {
+      "rmse_plausible_mean": 0.2605045931515859,
+      "delta_rmse_mean": 0.0011522342064833407,
+      "delta_rmse_ci95": 0.00041870902114112056,
+      "prediction_drift_mean": 0.022793469817379557,
+      "p95_drift_mean": 0.04097942926970698,
+      "mean_corrupt_geom_weight": 1.0,
+      "mean_corrupt_resid_weight": 0.09025559321395148,
+      "mean_corrupt_combined_weight": 0.09025559321395148
+    },
+    "geometry": {
+      "rmse_plausible_mean": 0.3168780034737096,
+      "delta_rmse_mean": 0.05880777018523291,
+      "delta_rmse_ci95": 0.004973414412280603,
+      "prediction_drift_mean": 0.1843445734877382,
+      "p95_drift_mean": 0.34331842055703676,
+      "mean_corrupt_geom_weight": 0.991919160807288,
+      "mean_corrupt_resid_weight": 1.0,
+      "mean_corrupt_combined_weight": 0.991919160807288
+    },
+    "bgr": {
+      "rmse_plausible_mean": 0.26051766112637587,
+      "delta_rmse_mean": 0.0011422361907906797,
+      "delta_rmse_ci95": 0.00043094775414408636,
+      "prediction_drift_mean": 0.02313942155037132,
+      "p95_drift_mean": 0.04144818197332069,
+      "mean_corrupt_geom_weight": 0.991919160807288,
+      "mean_corrupt_resid_weight": 0.0902529723871983,
+      "mean_corrupt_combined_weight": 0.08951745765478089
+    }
+  },
+  "leverage_A50": {
+    "ridge": {
+      "rmse_plausible_mean": 0.40338589062884944,
+      "delta_rmse_mean": 0.14523003943089607,
+      "delta_rmse_ci95": 0.006934853094304808,
+      "prediction_drift_mean": 0.32190559808410396,
+      "p95_drift_mean": 0.6320611680955361,
+      "mean_corrupt_geom_weight": 1.0,
+      "mean_corrupt_resid_weight": 1.0,
+      "mean_corrupt_combined_weight": 1.0
+    },
+    "huber": {
+      "rmse_plausible_mean": 0.3771118166001639,
+      "delta_rmse_mean": 0.11775945765506135,
+      "delta_rmse_ci95": 0.014843369733335833,
+      "prediction_drift_mean": 0.2922767009599257,
+      "p95_drift_mean": 0.5740491682384488,
+      "mean_corrupt_geom_weight": 1.0,
+      "mean_corrupt_resid_weight": 0.8131898726709892,
+      "mean_corrupt_combined_weight": 0.8131898726709892
+    },
+    "geometry": {
+      "rmse_plausible_mean": 0.2727021502282804,
+      "delta_rmse_mean": 0.014631916939803771,
+      "delta_rmse_ci95": 0.00608936454616294,
+      "prediction_drift_mean": 0.09754383585848948,
+      "p95_drift_mean": 0.1888895613005927,
+      "mean_corrupt_geom_weight": 0.005325220544175209,
+      "mean_corrupt_resid_weight": 1.0,
+      "mean_corrupt_combined_weight": 0.005325220544175209
+    },
+    "bgr": {
+      "rmse_plausible_mean": 0.25931188023442875,
+      "delta_rmse_mean": -6.354470115638167e-05,
+      "delta_rmse_ci95": 0.00031653250774864034,
+      "prediction_drift_mean": 0.011133201503612,
+      "p95_drift_mean": 0.02053856048462303,
+      "mean_corrupt_geom_weight": 0.005325220544175209,
+      "mean_corrupt_resid_weight": 0.4341549150411249,
+      "mean_corrupt_combined_weight": 0.002315827901982529
+    }
+  },
+  "mixed_A50_y4": {
+    "ridge": {
+      "rmse_plausible_mean": 0.4396098581470932,
+      "delta_rmse_mean": 0.1814540069491398,
+      "delta_rmse_ci95": 0.016845495300544352,
+      "prediction_drift_mean": 0.36758707499231613,
+      "p95_drift_mean": 0.7373678246803419,
+      "mean_corrupt_geom_weight": 1.0,
+      "mean_corrupt_resid_weight": 1.0,
+      "mean_corrupt_combined_weight": 1.0
+    },
+    "huber": {
+      "rmse_plausible_mean": 0.33637733634659117,
+      "delta_rmse_mean": 0.07702497740148859,
+      "delta_rmse_ci95": 0.01991033573635583,
+      "prediction_drift_mean": 0.23112690621298487,
+      "p95_drift_mean": 0.45666268169003404,
+      "mean_corrupt_geom_weight": 1.0,
+      "mean_corrupt_resid_weight": 0.38914947226273683,
+      "mean_corrupt_combined_weight": 0.38914947226273683
+    },
+    "geometry": {
+      "rmse_plausible_mean": 0.2731321883628713,
+      "delta_rmse_mean": 0.015061955074394636,
+      "delta_rmse_ci95": 0.0059366950249300976,
+      "prediction_drift_mean": 0.0994811217510049,
+      "p95_drift_mean": 0.1956980197020401,
+      "mean_corrupt_geom_weight": 0.005325220544175209,
+      "mean_corrupt_resid_weight": 1.0,
+      "mean_corrupt_combined_weight": 0.005325220544175209
+    },
+    "bgr": {
+      "rmse_plausible_mean": 0.2594732144932794,
+      "delta_rmse_mean": 9.778955769428333e-05,
+      "delta_rmse_ci95": 0.00030054752552770547,
+      "prediction_drift_mean": 0.010711436619021904,
+      "p95_drift_mean": 0.019802362598494827,
+      "mean_corrupt_geom_weight": 0.005325220544175209,
+      "mean_corrupt_resid_weight": 0.11137363344959468,
+      "mean_corrupt_combined_weight": 0.0005729055493366176
+    }
+  },
+  "gaussian_sigma_0_4": {
+    "ridge": {
+      "rmse_plausible_mean": 0.2823127037467058,
+      "delta_rmse_mean": 0.024156852548752432,
+      "delta_rmse_ci95": 0.007282613921628561,
+      "prediction_drift_mean": 0.10859477028567847,
+      "p95_drift_mean": 0.2079209477627105,
+      "mean_corrupt_geom_weight": 1.0,
+      "mean_corrupt_resid_weight": 1.0,
+      "mean_corrupt_combined_weight": 1.0
+    },
+    "huber": {
+      "rmse_plausible_mean": 0.286653423402713,
+      "delta_rmse_mean": 0.027301064457610408,
+      "delta_rmse_ci95": 0.007410530893110334,
+      "prediction_drift_mean": 0.1162897999900766,
+      "p95_drift_mean": 0.21980789407244986,
+      "mean_corrupt_geom_weight": 1.0,
+      "mean_corrupt_resid_weight": 0.9354619453480127,
+      "mean_corrupt_combined_weight": 0.9354619453480127
+    },
+    "geometry": {
+      "rmse_plausible_mean": 0.2821711150694566,
+      "delta_rmse_mean": 0.02410088178097989,
+      "delta_rmse_ci95": 0.007040613926175911,
+      "prediction_drift_mean": 0.10819366246933929,
+      "p95_drift_mean": 0.20793883181578993,
+      "mean_corrupt_geom_weight": 0.9803248369991227,
+      "mean_corrupt_resid_weight": 1.0,
+      "mean_corrupt_combined_weight": 0.9803248369991227
+    },
+    "bgr": {
+      "rmse_plausible_mean": 0.28664763122264075,
+      "delta_rmse_mean": 0.027272206287055602,
+      "delta_rmse_ci95": 0.007219048778732499,
+      "prediction_drift_mean": 0.11641010923996194,
+      "p95_drift_mean": 0.2214315359034142,
+      "mean_corrupt_geom_weight": 0.9803248369991227,
+      "mean_corrupt_resid_weight": 0.9353688714236684,
+      "mean_corrupt_combined_weight": 0.9165224247728772
+    }
+  },
+  "realistic_cells": {
+    "ridge": {
+      "rmse_plausible_mean": 0.2603720424026613,
+      "delta_rmse_mean": 0.0022161912047078984,
+      "delta_rmse_ci95": 0.002554019281483768,
+      "prediction_drift_mean": 0.04255854208840692,
+      "p95_drift_mean": 0.07913872267975253,
+      "mean_corrupt_geom_weight": 1.0,
+      "mean_corrupt_resid_weight": 1.0,
+      "mean_corrupt_combined_weight": 1.0
+    },
+    "huber": {
+      "rmse_plausible_mean": 0.2596599201399542,
+      "delta_rmse_mean": 0.0003075611948516632,
+      "delta_rmse_ci95": 0.0014202499316191544,
+      "prediction_drift_mean": 0.025052628437058855,
+      "p95_drift_mean": 0.047939561102764414,
+      "mean_corrupt_geom_weight": 1.0,
+      "mean_corrupt_resid_weight": 0.8489705310703114,
+      "mean_corrupt_combined_weight": 0.8489705310703114
+    },
+    "geometry": {
+      "rmse_plausible_mean": 0.2600738130209465,
+      "delta_rmse_mean": 0.0020035797324698566,
+      "delta_rmse_ci95": 0.0020854517704676162,
+      "prediction_drift_mean": 0.04494461124811471,
+      "p95_drift_mean": 0.08960785099174602,
+      "mean_corrupt_geom_weight": 0.3498248167297035,
+      "mean_corrupt_resid_weight": 1.0,
+      "mean_corrupt_combined_weight": 0.3498248167297035
+    },
+    "bgr": {
+      "rmse_plausible_mean": 0.2602759394215818,
+      "delta_rmse_mean": 0.0009005144859966369,
+      "delta_rmse_ci95": 0.0014540444043852367,
+      "prediction_drift_mean": 0.034228052705425636,
+      "p95_drift_mean": 0.06711975623300534,
+      "mean_corrupt_geom_weight": 0.3498248167297035,
+      "mean_corrupt_resid_weight": 0.5884028671004609,
+      "mean_corrupt_combined_weight": 0.23590738338404377
+    }
+  }
+}

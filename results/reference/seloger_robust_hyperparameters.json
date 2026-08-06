@@ -1,0 +1,87 @@
+{
+  "protocol": {
+    "global_dev_eval_partition": {
+      "pool_seed": 20260803,
+      "dev_fraction": 0.2,
+      "total_unique_ids": 3815,
+      "development_unique_ids": 763,
+      "evaluation_unique_ids": 3052,
+      "intersection_size": 0,
+      "development_ids_sha256": "9ea79d15a76873adbe721103a3cd86b4c6c441ce86019e1ba12875ccb736e106",
+      "evaluation_ids_sha256": "794187731f2f90578c086ac5af20a827cf83b8b168a70ac40bc56863f2c0c55e"
+    },
+    "development_seeds": [
+      3101,
+      3202,
+      3303
+    ],
+    "evaluation_seeds": [
+      1101,
+      1202,
+      1303,
+      1404,
+      1505,
+      1606,
+      1707,
+      1808,
+      1909,
+      2010
+    ],
+    "candidate_ladder": [
+      {
+        "q_geometry": 0.9,
+        "kappa_y": 2.0
+      },
+      {
+        "q_geometry": 0.95,
+        "kappa_y": 2.0
+      },
+      {
+        "q_geometry": 0.95,
+        "kappa_y": 3.0
+      },
+      {
+        "q_geometry": 0.975,
+        "kappa_y": 3.0
+      },
+      {
+        "q_geometry": 0.99,
+        "kappa_y": 4.0
+      },
+      {
+        "q_geometry": 1.0,
+        "kappa_y": 6.0
+      }
+    ],
+    "nominal_ratio_limit": 1.005,
+    "nominal_constraint_definition": "arithmetic mean across development splits of (robust validation RMSE / Ridge validation RMSE) <= 1.005",
+    "selection_rule": "choose separately for each family the most aggressive eligible candidate; report the maximum splitwise ratio but do not use it as the constraint",
+    "target": "log(price)",
+    "penalized_intercept": true,
+    "same_fit_functions_calibration_evaluation": true,
+    "bgr_max_iter": 12,
+    "bgr_tol": 2e-05,
+    "schweppe_max_iter": 12,
+    "schweppe_tol": 2e-05
+  },
+  "bgr": {
+    "q_geometry": 0.9,
+    "kappa_y": 2.0,
+    "aggressiveness_rank": 0,
+    "nominal_ratio_mean": 0.9874687709233458,
+    "nominal_ratio_max": 1.0022984053561776,
+    "nominal_rmse_mean": 0.6690422226766012,
+    "ridge_nominal_rmse_mean": 0.6785418129846016,
+    "selection_status": "most_aggressive_under_mean_of_ratios_constraint"
+  },
+  "schweppe_type": {
+    "q_geometry": 0.9,
+    "kappa_y": 2.0,
+    "aggressiveness_rank": 0,
+    "nominal_ratio_mean": 0.9871588781068464,
+    "nominal_ratio_max": 1.0010972815697021,
+    "nominal_rmse_mean": 0.6688937582257601,
+    "ridge_nominal_rmse_mean": 0.6785418129846016,
+    "selection_status": "most_aggressive_under_mean_of_ratios_constraint"
+  }
+}
